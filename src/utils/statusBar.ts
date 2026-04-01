@@ -75,8 +75,8 @@ export const updateStatusBarStyle = async (isDarkMode: boolean, themeId?: string
     });
 
     if (Capacitor.getPlatform() === 'android') {
-      const color = (themeId && THEME_STATUS_BAR_COLORS[themeId]) || (isDarkMode ? '#152518' : '#ffffff');
-      await StatusBar.setBackgroundColor({ color });
+      // Keep transparent so app extends behind status bar
+      await StatusBar.setBackgroundColor({ color: '#00000000' });
     }
   } catch (error) {
     console.warn('[StatusBar] Style update failed:', error);
