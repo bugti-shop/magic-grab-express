@@ -780,7 +780,7 @@ export const TaskInputSheet = ({ isOpen, onClose, onAddTask, folders, selectedFo
         className="fixed left-0 right-0 bg-card z-[70] rounded-t-3xl shadow-2xl pointer-events-auto transition-opacity"
         style={{ 
           bottom: shouldLiftForKeyboard ? `${keyboardHeight}px` : '0px',
-          paddingBottom: keyboardHeight > 0 ? '0px' : 'var(--safe-bottom, 8px)',
+          paddingBottom: keyboardHeight > 0 ? '0px' : 'max(var(--safe-bottom, 0px), 4px)',
           transform: swipeOffset > 0 ? `translateY(${swipeOffset}px)` : undefined,
           opacity: swipeOffset > 60 ? 0.6 : 1,
         }}
