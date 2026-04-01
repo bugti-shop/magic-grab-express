@@ -203,7 +203,7 @@ function usePaywallLogic() {
   return {
     t, showPaywall, selectedPlan, setSelectedPlan, isPurchasing, isRestoring,
     adminCode, setAdminCode, showAdminInput, setShowAdminInput, adminError,
-    PLANS, currentPlan, handlePurchase, handleRestore, handleAccessCode,
+    PLANS, currentPlan, handlePurchase, handleRestore, handleAccessCode, hasUsedTrial,
   };
 }
 
