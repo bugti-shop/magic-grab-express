@@ -114,11 +114,8 @@ export const TaskInputSheet = ({ isOpen, onClose, onAddTask, folders, selectedFo
   }, [onClose]);
   
   // Keyboard height detection.
-  // On Android native the visual viewport already tracks the keyboard,
-  // so adding keyboardHeight again causes the sheet to jump too high.
   const keyboardHeight = useKeyboardHeight();
-  const isAndroidNative = typeof document !== 'undefined' && document.body.classList.contains('android-app');
-  const shouldLiftForKeyboard = keyboardHeight > 0 && !isAndroidNative;
+  const shouldLiftForKeyboard = keyboardHeight > 0;
   
   // Load custom priorities
   const { priorities, getPriorityColor, getPriorityName } = usePriorities();
