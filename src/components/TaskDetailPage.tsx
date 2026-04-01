@@ -613,7 +613,7 @@ export const TaskDetailPage = ({
       style={{ paddingTop: 'var(--safe-top, 0px)', paddingBottom: 'var(--safe-bottom, 0px)' }}
     >
       {/* Header */}
-      <header className="flex items-center justify-between px-4 py-3 border-b border-border">
+      <header className="flex items-center justify-between px-4 py-3">
         {/* Left: Folders Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

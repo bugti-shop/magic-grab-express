@@ -307,7 +307,7 @@ export const FindReplacePage = ({
       )}
       style={{ paddingTop: 'var(--safe-top, 0px)', paddingBottom: 'var(--safe-bottom, 0px)' }}
     >
-      <header className="flex items-center justify-between px-4 py-3 border-b border-border">
+      <header className="flex items-center justify-between px-4 py-3">
         <Button variant="ghost" size="sm" onClick={handleClose}>
           <ArrowLeft className="h-5 w-5 mr-1" />
           {t('findReplace.back')}
