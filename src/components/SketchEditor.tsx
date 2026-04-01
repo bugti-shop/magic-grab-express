@@ -7309,7 +7309,7 @@ export const SketchEditor = memo(({ initialData, onChange, onImageExport, classN
           'flex-shrink-0 transition-all duration-300',
           (focusMode || presentationMode) && 'translate-y-full opacity-0 pointer-events-none absolute bottom-0 left-0 right-0'
         )}
-        style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)', maxWidth: '100vw' }}
+        style={{ paddingBottom: 'var(--safe-bottom, 0px)', maxWidth: '100vw' }}
       >
         <div
           className="mx-3 mb-3 rounded-[26px] border border-border/20 bg-card overflow-hidden"

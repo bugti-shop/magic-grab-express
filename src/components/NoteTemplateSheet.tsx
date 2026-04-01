@@ -1436,7 +1436,7 @@ export const NoteTemplateSheet = ({ isOpen, onClose, onApplyTemplate }: NoteTemp
           </ScrollArea>
 
           {/* Create custom button */}
-          <div className="px-5 py-3 border-t" style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}>
+          <div className="px-5 py-3 border-t" style={{ paddingBottom: 'calc(0.75rem + var(--safe-bottom, 0px))' }}>
             <Button variant="outline" className="w-full gap-2" onClick={() => setShowCreateDialog(true)}>
               <Plus className="h-4 w-4" />
               {t('noteTemplates.createCustomTemplate')}

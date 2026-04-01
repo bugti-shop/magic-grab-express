@@ -597,7 +597,7 @@ export const LocationReminderSheet = ({
 
         {/* Actions */}
         {!showTokenInput && (
-          <div className="p-4 border-t space-y-2 flex-shrink-0" style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
+          <div className="p-4 border-t space-y-2 flex-shrink-0" style={{ paddingBottom: 'var(--safe-bottom, 0px)' }}>
             {locationReminder && (
               <Button
                 variant="outline"

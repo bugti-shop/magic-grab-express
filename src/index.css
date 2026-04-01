@@ -14,8 +14,8 @@ All colors MUST be HSL.
 @layer base {
   :root {
     --keyboard-inset: 0px;
-    --safe-top: env(safe-area-inset-top, 0px);
-    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-top: var(--safe-top, 0px);
+    --safe-bottom: var(--safe-bottom, 0px);
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
@@ -583,7 +583,7 @@ table th[contenteditable="true"]:hover {
 
 /* Safe area utilities for mobile */
 .safe-area-pb {
-  padding-bottom: max(env(safe-area-inset-bottom), 12px);
+  padding-bottom: max(var(--safe-bottom, 0px), 12px);
 }
 
 /* Dynamic viewport height for mobile browsers */

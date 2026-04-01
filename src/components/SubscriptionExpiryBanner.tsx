@@ -69,7 +69,7 @@ export const SubscriptionExpiryBanner = () => {
     <div
       className="fixed top-0 left-0 right-0 z-[190] px-4 transition-all duration-300 ease-out"
       style={{
-        paddingTop: 'calc(env(safe-area-inset-top, 0px) + 12px)',
+        paddingTop: 'calc(var(--safe-top, 0px) + 12px)',
         opacity: visible ? 1 : 0,
         transform: visible ? 'translateY(0)' : 'translateY(-60px)',
       }}
