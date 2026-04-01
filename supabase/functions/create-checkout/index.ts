@@ -79,18 +79,19 @@ serve(async (req) => {
 
     const origin = req.headers.get("origin") || "https://magic-grab-express.lovable.app";
 
-    // Build session config
+    // Build session config — ALWAYS require credit card
     const sessionConfig: any = {
       customer: customerId,
       customer_email: customerId ? undefined : userEmail,
       line_items: [{ price: PRICE_IDS[planType], quantity: 1 }],
       mode: "subscription",
+      payment_method_collection: "always",
       success_url: `${origin}/?stripe_success=true&plan=${planType}`,
       cancel_url: `${origin}/`,
       metadata: { user_id: userId || "anonymous", plan_type: planType },
     };
 
-    // Only add free trial if eligible
+    // Only add free trial if eligible (credit card still required)
     if (shouldOfferTrial) {
       sessionConfig.subscription_data = {
         trial_period_days: TRIAL_DAYS,
