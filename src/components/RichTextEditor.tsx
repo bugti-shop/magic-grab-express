@@ -1938,7 +1938,7 @@ export const RichTextEditor = ({
       {toolbarPosition === 'bottom' && (
         <div
           className="fixed left-0 right-0 z-50 bg-background border-t"
-          style={{ bottom: 'calc(var(--safe-bottom, 0px) + var(--keyboard-inset, 0px))' }}
+          style={{ bottom: isAndroidNativeEditor ? '0px' : 'calc(var(--safe-bottom, 0px) + var(--keyboard-inset, 0px))' }}
         >
           {toolbar}
         </div>
