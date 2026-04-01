@@ -90,6 +90,18 @@ All colors MUST be HSL.
     --safe-bottom: 0px;
   }
 
+  /* Android edge-to-edge fix: WebView extends behind system nav bar but
+     100vh only covers the visual viewport, leaving a gap.  Force html/body
+     to stretch to 100% of the WebView so content fills the entire area. */
+  html.android-stretch,
+  html.android-stretch body {
+    height: 100%;
+    min-height: 100%;
+  }
+  html.android-stretch #root {
+    min-height: 100%;
+  }
+
   .dark,
   .ocean,
   .forest,
