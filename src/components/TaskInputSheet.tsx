@@ -781,7 +781,7 @@ export const TaskInputSheet = ({ isOpen, onClose, onAddTask, folders, selectedFo
         style={{ 
           bottom: shouldLiftForKeyboard ? `${keyboardHeight}px` : '0px',
           paddingBottom: keyboardHeight > 0 ? '0px' : 'max(var(--safe-bottom, 0px), 4px)',
-          maxHeight: shouldLiftForKeyboard ? `calc(100vh - ${keyboardHeight}px)` : '80vh',
+          maxHeight: isAndroidNative ? '60vh' : (shouldLiftForKeyboard ? `calc(100vh - ${keyboardHeight}px)` : '80vh'),
           transform: swipeOffset > 0 ? `translateY(${swipeOffset}px)` : undefined,
           opacity: swipeOffset > 60 ? 0.6 : 1,
         }}
