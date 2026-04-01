@@ -140,6 +140,9 @@ function usePaywallLogic() {
     }
   };
 
+  const [restoreEmail, setRestoreEmail] = useState('');
+  const [showRestoreEmail, setShowRestoreEmail] = useState(false);
+
   const handleRestore = async () => {
     setIsRestoring(true);
     try {
@@ -154,18 +157,33 @@ function usePaywallLogic() {
       } else {
         // Web: check Stripe subscription status
         const { data: { session } } = await supabase.auth.getSession();
-        if (!session?.access_token) {
-          setAdminError('Please log in to restore purchases');
-          setTimeout(() => setAdminError(''), 3000);
+        
+        // If no auth session, ask for email
+        if (!session?.access_token && !restoreEmail.trim()) {
+          setShowRestoreEmail(true);
+          setAdminError('Enter the email you used to subscribe');
+          setTimeout(() => setAdminError(''), 5000);
+          setIsRestoring(false);
           return;
         }
 
+        const headers: Record<string, string> = {};
+        if (session?.access_token) {
+          headers['Authorization'] = `Bearer ${session.access_token}`;
+        }
+
         const { data, error } = await supabase.functions.invoke('check-subscription', {
-          headers: { Authorization: `Bearer ${session.access_token}` },
+          body: restoreEmail.trim() ? { email: restoreEmail.trim() } : undefined,
+          headers,
         });
 
         if (data?.subscribed) {
-          // Trigger re-check in context
+          // Mark as subscribed locally
+          try { localStorage.setItem('flowist_stripe_subscribed', 'true'); } catch {}
+          try { localStorage.setItem('flowist_trial_used', 'true'); } catch {}
+          if (data.plan_type) {
+            (window as any).__stripePlanType = data.plan_type;
+          }
           window.dispatchEvent(new Event('stripeSubscriptionRestored'));
           closePaywall();
         } else {
@@ -196,15 +214,26 @@ function usePaywallLogic() {
     t, showPaywall, selectedPlan, setSelectedPlan, isPurchasing, isRestoring,
     adminCode, setAdminCode, showAdminInput, setShowAdminInput, adminError,
     PLANS, currentPlan, handlePurchase, handleRestore, handleAccessCode, hasUsedTrial,
+    restoreEmail, setRestoreEmail, showRestoreEmail,
   };
 }
 
 // Footer: Restore + Access Code (shared across variants)
 function PaywallFooter({ logic }: { logic: ReturnType<typeof usePaywallLogic> }) {
-  const { t, isRestoring, handleRestore, showAdminInput, setShowAdminInput, adminCode, setAdminCode, handleAccessCode, adminError } = logic;
+  const { t, isRestoring, handleRestore, showAdminInput, setShowAdminInput, adminCode, setAdminCode, handleAccessCode, adminError, restoreEmail, setRestoreEmail, showRestoreEmail } = logic;
   return (
     <div className="flex flex-col items-center gap-2 mt-3">
       {adminError && <p className="text-xs" style={{ color: 'hsl(0 84.2% 60.2%)' }}>{adminError}</p>}
+      {showRestoreEmail && (
+        <div className="flex items-center gap-2 mt-1">
+          <input type="email" value={restoreEmail} onChange={(e) => setRestoreEmail(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleRestore()}
+            placeholder="Enter subscription email" autoComplete="email"
+            className="h-8 w-48 rounded-md px-2 text-sm" style={{ border: '1px solid hsl(0 0% 89.8%)', background: 'hsl(0 0% 100%)', color: 'hsl(0 0% 3.9%)' }} />
+          <button onClick={handleRestore} disabled={isRestoring} className="h-8 px-3 rounded-md bg-primary text-primary-foreground text-sm font-medium">
+            {isRestoring ? '...' : 'Check'}
+          </button>
+        </div>
+      )}
       <div className="flex items-center gap-3">
         <button onClick={handleRestore} disabled={isRestoring} className="text-xs underline disabled:opacity-50" style={{ color: 'hsl(0 0% 45.1%)' }}>
           {isRestoring ? t('onboarding.paywall.restoring') : t('onboarding.paywall.restorePurchase')}
