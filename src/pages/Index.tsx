@@ -779,7 +779,7 @@ const Index = () => {
   return (
     <div className="min-h-screen min-h-screen-dynamic bg-background pb-14">
       <header 
-        className="border-b sticky top-0 bg-background z-10"
+        className="sticky top-0 bg-background z-10"
         style={{
           WebkitTransform: 'translateZ(0)',
           transform: 'translateZ(0)',

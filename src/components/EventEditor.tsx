@@ -185,7 +185,7 @@ export const EventEditor = ({ event, isOpen, onClose, onSave, defaultDate }: Eve
   return (
     <div className="fixed inset-0 z-50 bg-background flex flex-col" style={{ paddingTop: 'var(--safe-top, 0px)', paddingBottom: 'var(--safe-bottom, 0px)' }}>
       {/* Header */}
-      <header className="border-b bg-background sticky top-0 z-10">
+      <header className="bg-background sticky top-0 z-10">
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">

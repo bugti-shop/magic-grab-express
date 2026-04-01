@@ -198,7 +198,7 @@ export const TaskDateTimePage = ({
       style={{ paddingTop: 'var(--safe-top, 0px)', paddingBottom: 'var(--safe-bottom, 0px)', zIndex: isOnboarding ? 400 : 100 }}
     >
       {/* Header */}
-      <header className="flex items-center justify-between px-4 py-3 border-b border-border">
+      <header className="flex items-center justify-between px-4 py-3">
         <Button variant="ghost" size="sm" onClick={onClose}>
           <X className="h-5 w-5 mr-1" />
           {t('dateTime.cancel')}

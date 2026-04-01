@@ -30,7 +30,7 @@ export const TodoLayout = ({ children, title, searchValue, onSearchChange }: Tod
   return (
     <div className="min-h-screen bg-background">
       <header 
-        className="border-b sticky top-0 bg-background z-30"
+        className="sticky top-0 bg-background z-30"
         style={{
           WebkitTransform: 'translateZ(0)',
           transform: 'translateZ(0)',
