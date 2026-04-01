@@ -269,7 +269,7 @@ function PaywallVariantA({ logic }: { logic: ReturnType<typeof usePaywallLogic> 
             </motion.div>
           ))}
 
-          {(selectedPlan === 'monthly' || selectedPlan === 'yearly') && (
+          {!hasUsedTrial && (selectedPlan === 'monthly' || selectedPlan === 'yearly') && (
             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }} className="flex items-start gap-3 mb-6 relative">
               <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground z-10 flex-shrink-0"><Gift size={16} strokeWidth={2} /></div>
               <div>
