@@ -140,6 +140,9 @@ function usePaywallLogic() {
     }
   };
 
+  const [restoreEmail, setRestoreEmail] = useState('');
+  const [showRestoreEmail, setShowRestoreEmail] = useState(false);
+
   const handleRestore = async () => {
     setIsRestoring(true);
     try {
@@ -154,18 +157,33 @@ function usePaywallLogic() {
       } else {
         // Web: check Stripe subscription status
         const { data: { session } } = await supabase.auth.getSession();
-        if (!session?.access_token) {
-          setAdminError('Please log in to restore purchases');
-          setTimeout(() => setAdminError(''), 3000);
+        
+        // If no auth session, ask for email
+        if (!session?.access_token && !restoreEmail.trim()) {
+          setShowRestoreEmail(true);
+          setAdminError('Enter the email you used to subscribe');
+          setTimeout(() => setAdminError(''), 5000);
+          setIsRestoring(false);
           return;
         }
 
+        const headers: Record<string, string> = {};
+        if (session?.access_token) {
+          headers['Authorization'] = `Bearer ${session.access_token}`;
+        }
+
         const { data, error } = await supabase.functions.invoke('check-subscription', {
-          headers: { Authorization: `Bearer ${session.access_token}` },
+          body: restoreEmail.trim() ? { email: restoreEmail.trim() } : undefined,
+          headers,
         });
 
         if (data?.subscribed) {
-          // Trigger re-check in context
+          // Mark as subscribed locally
+          try { localStorage.setItem('flowist_stripe_subscribed', 'true'); } catch {}
+          try { localStorage.setItem('flowist_trial_used', 'true'); } catch {}
+          if (data.plan_type) {
+            (window as any).__stripePlanType = data.plan_type;
+          }
           window.dispatchEvent(new Event('stripeSubscriptionRestored'));
           closePaywall();
         } else {
