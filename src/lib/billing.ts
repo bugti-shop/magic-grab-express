@@ -35,6 +35,20 @@ export const getSubscriptionDetails = (plan: PlanType): SubscriptionProduct => {
   return BILLING_CONFIG[plan];
 };
 
+// Stripe Payment Links for web purchases
+export const STRIPE_PAYMENT_LINKS: Record<PlanType, string> = {
+  weekly: 'https://buy.stripe.com/7sY14n7WX15lbLraEjgfu00',
+  monthly: 'https://buy.stripe.com/7sYfZh911cO302JaEjgfu01',
+  yearly: 'https://buy.stripe.com/fZuaEX5OP8xNdTz3bRgfu02',
+};
+
+// Stripe Price IDs
+export const STRIPE_PRICE_IDS: Record<PlanType, string> = {
+  weekly: 'price_1THRuxFAPtKh08jGJAJyGPSS',
+  monthly: 'price_1THRyrFAPtKh08jGj5rZr1CB',
+  yearly: 'price_1THRzxFAPtKh08jGoDkVIric',
+};
+
 // Pricing display (for UI only - actual pricing comes from RevenueCat/Store)
 export const PRICING_DISPLAY = {
   weekly: {
