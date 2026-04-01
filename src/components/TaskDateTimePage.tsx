@@ -195,7 +195,7 @@ export const TaskDateTimePage = ({
         "fixed inset-0 bg-background flex flex-col transition-transform duration-300",
         isOpen ? "translate-x-0" : "translate-x-full"
       )}
-      style={{ paddingTop: 'env(safe-area-inset-top, 0px)', paddingBottom: 'env(safe-area-inset-bottom, 0px)', zIndex: isOnboarding ? 400 : 100 }}
+      style={{ paddingTop: 'var(--safe-top, 0px)', paddingBottom: 'var(--safe-bottom, 0px)', zIndex: isOnboarding ? 400 : 100 }}
     >
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 border-b border-border">
@@ -543,7 +543,7 @@ export const TaskDateTimePage = ({
       </div>
 
       {/* Safe area padding */}
-      <div style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }} />
+      <div style={{ paddingBottom: 'var(--safe-bottom, 0px)' }} />
     </div>
   );
 };

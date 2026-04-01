@@ -34,7 +34,7 @@ export const TodoLayout = ({ children, title, searchValue, onSearchChange }: Tod
         style={{
           WebkitTransform: 'translateZ(0)',
           transform: 'translateZ(0)',
-          paddingTop: 'calc(env(safe-area-inset-top) + 12px)',
+          paddingTop: 'calc(var(--safe-top, 0px) + 12px)',
         }}
       >
         <div className="container mx-auto px-3 sm:px-4 py-2">

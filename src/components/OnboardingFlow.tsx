@@ -86,8 +86,8 @@ const PlanLoadingScreen = ({ onComplete, displayName }: { onComplete: () => void
     <div
       className="fixed inset-0 z-[300] flex flex-col bg-white items-center justify-center"
       style={{
-        paddingTop: 'env(safe-area-inset-top, 0px)',
-        paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+        paddingTop: 'var(--safe-top, 0px)',
+        paddingBottom: 'var(--safe-bottom, 0px)',
       }}
     >
       <div className="flex flex-col items-center px-8">
@@ -188,7 +188,7 @@ const OnboardingFolderCreation = ({ type, folders, setFolders, progressPercent, 
     : 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)';
 
   return (
-    <div className="fixed inset-0 z-[300] flex flex-col bg-white" style={{ paddingTop: 'env(safe-area-inset-top, 0px)', paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
+    <div className="fixed inset-0 z-[300] flex flex-col bg-white" style={{ paddingTop: 'var(--safe-top, 0px)', paddingBottom: 'var(--safe-bottom, 0px)' }}>
       {/* Header */}
       <div className="flex items-end gap-3 px-4 pt-3 pb-2">
         <motion.button
@@ -351,7 +351,7 @@ const OnboardingFolderCreation = ({ type, folders, setFolders, progressPercent, 
       </div>
 
       {/* Bottom button */}
-      <div className="px-6 pb-6 pt-2" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 24px)' }}>
+      <div className="px-6 pb-6 pt-2" style={{ paddingBottom: 'max(var(--safe-bottom, 0px), 24px)' }}>
         <motion.button
           onClick={() => { triggerHaptic(); goNext(); }}
           className="w-full py-3.5 rounded-2xl text-[17px] font-bold text-white"
@@ -383,7 +383,7 @@ const OnboardingTaskViewStep = ({ createdTasks, setCreatedTasks, progressPercent
   const TodayPage = useMemo(() => lazy(() => import('@/pages/todo/Today')), []);
 
   return (
-    <div className="fixed inset-0 z-[300] flex flex-col bg-white" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
+    <div className="fixed inset-0 z-[300] flex flex-col bg-white" style={{ paddingTop: 'var(--safe-top, 0px)' }}>
       {/* Onboarding progress header */}
       <div className="flex items-center gap-3 px-4 pt-1 pb-1 relative z-50 bg-white">
         <button className="w-[17px] h-[17px] flex items-center justify-center" onClick={handleBack} aria-label="Back">
@@ -407,7 +407,7 @@ const OnboardingTaskViewStep = ({ createdTasks, setCreatedTasks, progressPercent
       </div>
 
       {/* Bottom buttons */}
-      <div className="px-4 pb-2 pt-1 flex flex-col gap-1.5 relative z-50 bg-white" style={{ paddingBottom: 'env(safe-area-inset-bottom, 8px)' }}>
+      <div className="px-4 pb-2 pt-1 flex flex-col gap-1.5 relative z-50 bg-white" style={{ paddingBottom: 'var(--safe-bottom, 8px)' }}>
         <motion.button onClick={goNext} className="w-full py-3 rounded-2xl text-[17px] font-bold" style={{ backgroundColor: '#333333', color: '#ffffff', boxShadow: '0 8px 0 0 #000000' }} whileTap={{ scale: 0.97 }}>
           {t('onboarding.continue')}
         </motion.button>
@@ -573,7 +573,7 @@ const OnboardingBatchTaskForm = ({ sections, folders, onAddTasks, onCancel }: {
       <div className="flex-1" />
 
       {/* Task count + Add button */}
-      <div className="flex flex-col gap-2 pb-2" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 8px)' }}>
+      <div className="flex flex-col gap-2 pb-2" style={{ paddingBottom: 'max(var(--safe-bottom, 0px), 8px)' }}>
         {taskCount > 0 && (
           <p className="text-[13px] text-[#767b7e] font-['Nunito_Sans'] text-center">{t('onboarding.tasksReadyToAdd', '{{count}} task(s) ready to add', { count: taskCount })}</p>
         )}
@@ -1088,8 +1088,8 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
       <div
         className="fixed inset-0 z-[300] flex flex-col bg-white"
         style={{
-          paddingTop: 'env(safe-area-inset-top, 0px)',
-          paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+          paddingTop: 'var(--safe-top, 0px)',
+          paddingBottom: 'var(--safe-bottom, 0px)',
         }}
       >
         {/* Header */}
@@ -1172,7 +1172,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
         </div>
 
         {/* Continue button */}
-        <div className="px-6 pb-6 pt-2" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 24px)' }}>
+        <div className="px-6 pb-6 pt-2" style={{ paddingBottom: 'max(var(--safe-bottom, 0px), 24px)' }}>
           <motion.button
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -1222,8 +1222,8 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
       <div
         className="fixed inset-0 z-[300] flex flex-col bg-white"
         style={{
-          paddingTop: 'env(safe-area-inset-top, 0px)',
-          paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+          paddingTop: 'var(--safe-top, 0px)',
+          paddingBottom: 'var(--safe-bottom, 0px)',
         }}
       >
         {/* Top bar */}
@@ -1307,7 +1307,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
         </div>
 
         {/* Bottom button */}
-        <div className="px-6 pb-6 pt-2" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 24px)' }}>
+        <div className="px-6 pb-6 pt-2" style={{ paddingBottom: 'max(var(--safe-bottom, 0px), 24px)' }}>
           <motion.button
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -1380,7 +1380,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
     const canAddMore = createdTasks.length < MAX_ONBOARDING_TASKS;
 
     return (
-      <div className="fixed inset-0 z-[300] flex flex-col bg-white" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
+      <div className="fixed inset-0 z-[300] flex flex-col bg-white" style={{ paddingTop: 'var(--safe-top, 0px)' }}>
         {/* Onboarding progress header */}
         <div className="flex items-center gap-3 px-4 pt-1 pb-1 relative z-50 bg-white">
           <button className="w-[17px] h-[17px] flex items-center justify-center" onClick={handleBack} aria-label="Back">
@@ -1405,7 +1405,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
 
         {/* Bottom buttons - hide when task input sheet is open */}
         {!isTaskInputSheetOpen && (
-          <div className="px-4 pb-2 pt-1 flex flex-col gap-1.5 relative z-50 bg-white" style={{ paddingBottom: 'env(safe-area-inset-bottom, 8px)' }}>
+          <div className="px-4 pb-2 pt-1 flex flex-col gap-1.5 relative z-50 bg-white" style={{ paddingBottom: 'var(--safe-bottom, 8px)' }}>
             <motion.button onClick={goNext} className="w-full py-3 rounded-2xl text-[17px] font-bold" style={{ backgroundColor: '#333333', color: '#ffffff', boxShadow: '0 8px 0 0 #000000' }} whileTap={{ scale: 0.97 }}>
               {createdTasks.length > 0 ? `${t('onboarding.continue')} · ${createdTasks.length} ${t('common.tasks', 'tasks')}` : t('onboarding.continue')}
             </motion.button>
@@ -1476,8 +1476,8 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
       <div
         className="fixed inset-0 z-[300] flex flex-col bg-white"
         style={{
-          paddingTop: 'env(safe-area-inset-top, 0px)',
-          paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+          paddingTop: 'var(--safe-top, 0px)',
+          paddingBottom: 'var(--safe-bottom, 0px)',
         }}
       >
         <div className="flex-1 overflow-y-auto px-5 pt-6 pb-4">
@@ -1508,7 +1508,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
             />
           </motion.div>
         </div>
-        <div className="px-6 pb-6 pt-2" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 24px)' }}>
+        <div className="px-6 pb-6 pt-2" style={{ paddingBottom: 'max(var(--safe-bottom, 0px), 24px)' }}>
           <motion.button
             onClick={async () => {
               setShowOnboardingCertificate(false);
@@ -1535,7 +1535,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
       { icon: <Gift size={16} strokeWidth={2} />, title: t('onboarding.readyFreeTrial'), desc: t('onboarding.readyFreeTrialDesc') },
     ];
     return (
-      <div className="fixed inset-0 z-[300] flex flex-col bg-white" style={{ paddingTop: 'env(safe-area-inset-top, 0px)', paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
+      <div className="fixed inset-0 z-[300] flex flex-col bg-white" style={{ paddingTop: 'var(--safe-top, 0px)', paddingBottom: 'var(--safe-bottom, 0px)' }}>
         <div className="px-4 pt-3 pb-1">
           <motion.button initial={{ opacity: 0 }} animate={{ opacity: 1 }} onClick={() => { setShowReadyScreen(false); setShowOnboardingCertificate(true); }} className="w-10 h-10 flex items-center justify-center">
             <ArrowLeft size={22} color="#1a1a1a" />
@@ -1565,7 +1565,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
             
           </motion.div>
         </div>
-        <div className="px-6 pb-6 pt-2" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 24px)' }}>
+        <div className="px-6 pb-6 pt-2" style={{ paddingBottom: 'max(var(--safe-bottom, 0px), 24px)' }}>
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7 }} className="text-center text-[13px] font-medium mb-3" style={{ color: 'hsl(0 0% 45.1%)' }}>
             {t('onboarding.noCommitment')}
           </motion.p>
@@ -1583,8 +1583,8 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
       <div
         className="fixed inset-0 z-[300] flex flex-col bg-white"
         style={{
-          paddingTop: 'env(safe-area-inset-top, 0px)',
-          paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+          paddingTop: 'var(--safe-top, 0px)',
+          paddingBottom: 'var(--safe-bottom, 0px)',
         }}
       >
         <div className="flex items-end gap-3 px-4 pt-3 pb-2">
@@ -1656,7 +1656,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
           </div>
         </div>
 
-        <div className="px-6 pb-6 pt-2" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 24px)' }}>
+        <div className="px-6 pb-6 pt-2" style={{ paddingBottom: 'max(var(--safe-bottom, 0px), 24px)' }}>
           <motion.button
             onClick={goNext}
             className="w-full py-3 rounded-2xl text-[17px] font-bold cursor-pointer"
@@ -1683,8 +1683,8 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
         className="fixed inset-0 z-[300] flex items-center justify-center"
         style={{
           background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
-          paddingTop: 'env(safe-area-inset-top, 0px)',
-          paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+          paddingTop: 'var(--safe-top, 0px)',
+          paddingBottom: 'var(--safe-bottom, 0px)',
         }}
         onClick={goNext}
       >
@@ -1770,8 +1770,8 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
       <div
         className="fixed inset-0 z-[300] flex flex-col bg-white"
         style={{
-          paddingTop: 'env(safe-area-inset-top, 0px)',
-          paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+          paddingTop: 'var(--safe-top, 0px)',
+          paddingBottom: 'var(--safe-bottom, 0px)',
         }}
       >
         <div className="flex items-end gap-3 px-4 pt-3 pb-2">
@@ -1826,7 +1826,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
           </motion.div>
         </div>
 
-        <div className="px-6 pb-6 pt-2" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 24px)' }}>
+        <div className="px-6 pb-6 pt-2" style={{ paddingBottom: 'max(var(--safe-bottom, 0px), 24px)' }}>
           <motion.button
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -1926,8 +1926,8 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
     <div
       className="fixed inset-0 z-[300] flex flex-col bg-white"
       style={{
-        paddingTop: 'env(safe-area-inset-top, 0px)',
-        paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+        paddingTop: 'var(--safe-top, 0px)',
+        paddingBottom: 'var(--safe-bottom, 0px)',
       }}
     >
       {/* Top bar */}

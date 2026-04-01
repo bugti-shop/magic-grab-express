@@ -610,7 +610,7 @@ export const TaskDetailPage = ({
         "fixed inset-0 bg-background z-50 flex flex-col transition-transform duration-300",
         isOpen ? "translate-x-0" : "translate-x-full"
       )}
-      style={{ paddingTop: 'env(safe-area-inset-top, 0px)', paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
+      style={{ paddingTop: 'var(--safe-top, 0px)', paddingBottom: 'var(--safe-bottom, 0px)' }}
     >
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 border-b border-border">
@@ -1339,7 +1339,7 @@ export const TaskDetailPage = ({
       </div>
 
       {/* Safe area padding for bottom */}
-      <div style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }} />
+      <div style={{ paddingBottom: 'var(--safe-bottom, 0px)' }} />
 
       {/* TaskDateTimePage */}
       <TaskDateTimePage
@@ -1393,7 +1393,7 @@ export const TaskDetailPage = ({
       {/* In-App Attachment Preview */}
       {previewAttachment && (
         <div className="fixed inset-0 z-[100] bg-black/90 flex flex-col" onClick={() => setPreviewAttachment(null)}>
-          <div className="flex items-center justify-between px-4 py-3" style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 12px)' }}>
+          <div className="flex items-center justify-between px-4 py-3" style={{ paddingTop: 'calc(var(--safe-top, 0px) + 12px)' }}>
             <p className="text-white text-sm font-medium truncate flex-1">{previewAttachment.name}</p>
             <button onClick={() => setPreviewAttachment(null)} className="p-2 text-white">
               <X className="h-6 w-6" />

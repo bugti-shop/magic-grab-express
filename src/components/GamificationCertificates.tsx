@@ -459,7 +459,7 @@ export const GamificationCertificates = ({ isOpen, onClose, streakData }: Certif
           />
         )}
         {/* Header */}
-         <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-sm border-b border-border px-4 py-3 pt-[calc(env(safe-area-inset-top)+12px)] flex items-center justify-between">
+         <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-sm border-b border-border px-4 py-3 pt-[calc(var(--safe-top, 0px) + 12px)] flex items-center justify-between">
           <h2 className="text-lg font-bold flex items-center gap-2">
             <Award className="h-5 w-5 text-warning" />
             {t('certificates.title', 'Certificates')}

@@ -41,7 +41,7 @@ const DrawerContent = React.forwardRef<
       )}
       style={{ 
         willChange: 'transform',
-        paddingBottom: 'env(safe-area-inset-bottom, 0px)'
+        paddingBottom: 'var(--safe-bottom, 0px)'
       }}
       {...props}
     >

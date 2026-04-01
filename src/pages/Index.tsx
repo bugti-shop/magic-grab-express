@@ -783,7 +783,7 @@ const Index = () => {
         style={{
           WebkitTransform: 'translateZ(0)',
           transform: 'translateZ(0)',
-          paddingTop: 'env(safe-area-inset-top)',
+          paddingTop: 'var(--safe-top, 0px)',
         }}
       >
         <div className="container mx-auto px-2 xs:px-3 sm:px-4 py-2">
@@ -1314,7 +1314,7 @@ const Index = () => {
           // If only one type is visible, directly open that note type without dropdown
           <Button
             className="fixed left-4 right-4 z-50 h-12 text-base font-semibold"
-            style={{ bottom: 'calc(4.25rem + env(safe-area-inset-bottom, 0px))' }}
+            style={{ bottom: 'calc(4.25rem + var(--safe-bottom, 0px))' }}
             size="lg"
             onClick={() => {
               triggerHaptic('heavy');
@@ -1331,7 +1331,7 @@ const Index = () => {
               <Button
                 data-tour="new-note-button"
                 className="fixed left-4 right-4 z-50 h-12 text-base font-semibold"
-                style={{ bottom: 'calc(4.25rem + env(safe-area-inset-bottom, 0px))' }}
+                style={{ bottom: 'calc(4.25rem + var(--safe-bottom, 0px))' }}
                 size="lg"
                 onClick={() => triggerHaptic('heavy')}
               >

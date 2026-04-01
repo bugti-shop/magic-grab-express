@@ -273,7 +273,7 @@ export const VirtualizedCodeEditor = ({
   const totalHeight = useMemo(() => lines.length * lineHeight, [lines.length, lineHeight]);
 
   return (
-    <div className="fixed inset-0 flex flex-col bg-[#0d1117] z-50" style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
+    <div className="fixed inset-0 flex flex-col bg-[#0d1117] z-50" style={{ paddingTop: 'var(--safe-top, 0px)', paddingBottom: 'var(--safe-bottom, 0px)' }}>
       {/* Header */}
       <div className="flex items-center justify-between px-3 py-2 border-b border-[#30363d] flex-shrink-0 bg-[#161b22]">
         <div className="flex items-center gap-2">

@@ -276,7 +276,7 @@ export const SubtaskDetailSheet = ({
         {/* Header - Similar to TaskDetailPage */}
         <header 
           className="flex items-center justify-between px-4 py-3 border-b border-border"
-          style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 12px)' }}
+          style={{ paddingTop: 'calc(var(--safe-top, 0px) + 12px)' }}
         >
           {/* Left: All Tasks label */}
           <Button variant="ghost" size="sm" className="gap-2">
@@ -568,7 +568,7 @@ export const SubtaskDetailSheet = ({
         </div>
 
         {/* Safe area padding for bottom */}
-        <div style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }} />
+        <div style={{ paddingBottom: 'var(--safe-bottom, 0px)' }} />
 
         {/* TaskDateTimePage */}
         <TaskDateTimePage
