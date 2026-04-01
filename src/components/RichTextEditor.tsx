@@ -1680,7 +1680,11 @@ export const RichTextEditor = ({
   }, [content, reattachImageListeners, reattachTableListeners, reattachAudioListeners, reattachFileListeners]);
 
   // Adjust toolbar position when the on-screen keyboard appears using VisualViewport
+  // On Android native, the Capacitor Keyboard plugin (useKeyboardHeight in App.tsx)
+  // already sets --keyboard-inset accurately, so skip the local visualViewport logic.
+  const isAndroidNativeEditor = typeof document !== 'undefined' && document.body.classList.contains('android-app');
   useEffect(() => {
+    if (isAndroidNativeEditor) return; // Capacitor plugin handles this
     const vv = (window as any).visualViewport as VisualViewport | undefined;
     const setInset = () => {
       if (!vv) return;
@@ -1698,7 +1702,7 @@ export const RichTextEditor = ({
         vv.removeEventListener('scroll', setInset);
       }
     };
-  }, []);
+  }, [isAndroidNativeEditor]);
 
   // Handle table context menu (right-click or long-press on table cells)
   useEffect(() => {
@@ -1902,7 +1906,7 @@ export const RichTextEditor = ({
           className
         )}
         style={{
-          paddingBottom: 'calc(8rem + var(--keyboard-inset, 0px))',
+          paddingBottom: isAndroidNativeEditor ? '8rem' : 'calc(8rem + var(--keyboard-inset, 0px))',
           fontFamily: notesSettings.normalText.fontFamily !== 'System Default' ? notesSettings.normalText.fontFamily : fontFamily,
           fontSize: notesSettings.normalText.fontSize ? `${notesSettings.normalText.fontSize}px` : fontSize,
           color: notesSettings.normalText.fontColor && notesSettings.normalText.fontColor !== '#000000' ? notesSettings.normalText.fontColor : undefined,
@@ -1934,7 +1938,7 @@ export const RichTextEditor = ({
       {toolbarPosition === 'bottom' && (
         <div
           className="fixed left-0 right-0 z-50 bg-background border-t"
-          style={{ bottom: 'calc(var(--safe-bottom, 0px) + var(--keyboard-inset, 0px))' }}
+          style={{ bottom: isAndroidNativeEditor ? '0px' : 'calc(var(--safe-bottom, 0px) + var(--keyboard-inset, 0px))' }}
         >
           {toolbar}
         </div>
