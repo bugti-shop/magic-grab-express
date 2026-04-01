@@ -18,6 +18,10 @@ const config: CapacitorConfig = {
         webClientId: '425291387152-u06impgmsgg286jg7odo4f40fu6pjmb5.apps.googleusercontent.com',
       },
     },
+    Keyboard: {
+      resize: 'none',
+      resizeOnFullScreen: false,
+    },
   },
   android: {
     allowMixedContent: true,
