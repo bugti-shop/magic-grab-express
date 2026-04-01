@@ -351,7 +351,7 @@ const OnboardingFolderCreation = ({ type, folders, setFolders, progressPercent, 
       </div>
 
       {/* Bottom button */}
-      <div className="px-6 pb-6 pt-2" style={{ paddingBottom: 'max(var(--safe-bottom, 0px), 24px)' }}>
+      <div className="px-6 pb-6 pt-2" style={{ paddingBottom: 'max(var(--safe-bottom, 0px), 12px)' }}>
         <motion.button
           onClick={() => { triggerHaptic(); goNext(); }}
           className="w-full py-3.5 rounded-2xl text-[17px] font-bold text-white"
@@ -407,7 +407,7 @@ const OnboardingTaskViewStep = ({ createdTasks, setCreatedTasks, progressPercent
       </div>
 
       {/* Bottom buttons */}
-      <div className="px-4 pb-2 pt-1 flex flex-col gap-1.5 relative z-50 bg-white" style={{ paddingBottom: 'var(--safe-bottom, 8px)' }}>
+      <div className="px-4 pb-2 pt-1 flex flex-col gap-1.5 relative z-50 bg-white" style={{ paddingBottom: 'max(var(--safe-bottom, 0px), 4px)' }}>
         <motion.button onClick={goNext} className="w-full py-3 rounded-2xl text-[17px] font-bold" style={{ backgroundColor: '#333333', color: '#ffffff', boxShadow: '0 8px 0 0 #000000' }} whileTap={{ scale: 0.97 }}>
           {t('onboarding.continue')}
         </motion.button>
@@ -1172,7 +1172,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
         </div>
 
         {/* Continue button */}
-        <div className="px-6 pb-6 pt-2" style={{ paddingBottom: 'max(var(--safe-bottom, 0px), 24px)' }}>
+        <div className="px-6 pb-6 pt-2" style={{ paddingBottom: 'max(var(--safe-bottom, 0px), 12px)' }}>
           <motion.button
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -1307,7 +1307,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
         </div>
 
         {/* Bottom button */}
-        <div className="px-6 pb-6 pt-2" style={{ paddingBottom: 'max(var(--safe-bottom, 0px), 24px)' }}>
+        <div className="px-6 pb-6 pt-2" style={{ paddingBottom: 'max(var(--safe-bottom, 0px), 12px)' }}>
           <motion.button
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -1405,7 +1405,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
 
         {/* Bottom buttons - hide when task input sheet is open */}
         {!isTaskInputSheetOpen && (
-          <div className="px-4 pb-2 pt-1 flex flex-col gap-1.5 relative z-50 bg-white" style={{ paddingBottom: 'var(--safe-bottom, 8px)' }}>
+          <div className="px-4 pb-2 pt-1 flex flex-col gap-1.5 relative z-50 bg-white" style={{ paddingBottom: 'max(var(--safe-bottom, 0px), 4px)' }}>
             <motion.button onClick={goNext} className="w-full py-3 rounded-2xl text-[17px] font-bold" style={{ backgroundColor: '#333333', color: '#ffffff', boxShadow: '0 8px 0 0 #000000' }} whileTap={{ scale: 0.97 }}>
               {createdTasks.length > 0 ? `${t('onboarding.continue')} · ${createdTasks.length} ${t('common.tasks', 'tasks')}` : t('onboarding.continue')}
             </motion.button>
@@ -1508,7 +1508,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
             />
           </motion.div>
         </div>
-        <div className="px-6 pb-6 pt-2" style={{ paddingBottom: 'max(var(--safe-bottom, 0px), 24px)' }}>
+        <div className="px-6 pb-6 pt-2" style={{ paddingBottom: 'max(var(--safe-bottom, 0px), 12px)' }}>
           <motion.button
             onClick={async () => {
               setShowOnboardingCertificate(false);
@@ -1565,7 +1565,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
             
           </motion.div>
         </div>
-        <div className="px-6 pb-6 pt-2" style={{ paddingBottom: 'max(var(--safe-bottom, 0px), 24px)' }}>
+        <div className="px-6 pb-6 pt-2" style={{ paddingBottom: 'max(var(--safe-bottom, 0px), 12px)' }}>
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7 }} className="text-center text-[13px] font-medium mb-3" style={{ color: 'hsl(0 0% 45.1%)' }}>
             {t('onboarding.noCommitment')}
           </motion.p>
@@ -1656,7 +1656,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
           </div>
         </div>
 
-        <div className="px-6 pb-6 pt-2" style={{ paddingBottom: 'max(var(--safe-bottom, 0px), 24px)' }}>
+        <div className="px-6 pb-6 pt-2" style={{ paddingBottom: 'max(var(--safe-bottom, 0px), 12px)' }}>
           <motion.button
             onClick={goNext}
             className="w-full py-3 rounded-2xl text-[17px] font-bold cursor-pointer"
@@ -1826,7 +1826,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
           </motion.div>
         </div>
 
-        <div className="px-6 pb-6 pt-2" style={{ paddingBottom: 'max(var(--safe-bottom, 0px), 24px)' }}>
+        <div className="px-6 pb-6 pt-2" style={{ paddingBottom: 'max(var(--safe-bottom, 0px), 12px)' }}>
           <motion.button
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -2162,7 +2162,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
       </AnimatePresence>
 
       {/* Bottom Next button */}
-      <div className="px-6 pb-6 pt-2 flex flex-col items-center">
+      <div className="px-6 pb-3 pt-2 flex flex-col items-center" style={{ paddingBottom: 'max(var(--safe-bottom, 0px), 12px)' }}>
         <motion.button
           onClick={goNext}
           disabled={!currentValid}
