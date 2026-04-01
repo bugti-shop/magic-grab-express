@@ -1906,7 +1906,7 @@ export const RichTextEditor = ({
           className
         )}
         style={{
-          paddingBottom: 'calc(8rem + var(--keyboard-inset, 0px))',
+          paddingBottom: isAndroidNativeEditor ? '8rem' : 'calc(8rem + var(--keyboard-inset, 0px))',
           fontFamily: notesSettings.normalText.fontFamily !== 'System Default' ? notesSettings.normalText.fontFamily : fontFamily,
           fontSize: notesSettings.normalText.fontSize ? `${notesSettings.normalText.fontSize}px` : fontSize,
           color: notesSettings.normalText.fontColor && notesSettings.normalText.fontColor !== '#000000' ? notesSettings.normalText.fontColor : undefined,
