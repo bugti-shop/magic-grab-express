@@ -113,8 +113,12 @@ export const TaskInputSheet = ({ isOpen, onClose, onAddTask, folders, selectedFo
     swipeCurrentY.current = 0;
   }, [onClose]);
   
-  // Keyboard height detection to keep sheet above keyboard
+  // Keyboard height detection.
+  // On Android native the visual viewport already tracks the keyboard,
+  // so adding keyboardHeight again causes the sheet to jump too high.
   const keyboardHeight = useKeyboardHeight();
+  const isAndroidNative = typeof document !== 'undefined' && document.body.classList.contains('android-app');
+  const shouldLiftForKeyboard = keyboardHeight > 0 && !isAndroidNative;
   
   // Load custom priorities
   const { priorities, getPriorityColor, getPriorityName } = usePriorities();
@@ -775,7 +779,7 @@ export const TaskInputSheet = ({ isOpen, onClose, onAddTask, folders, selectedFo
       <div
         className="fixed left-0 right-0 bg-card z-[70] rounded-t-3xl shadow-2xl pointer-events-auto transition-opacity"
         style={{ 
-          bottom: keyboardHeight > 0 ? `${keyboardHeight}px` : '0px',
+          bottom: shouldLiftForKeyboard ? `${keyboardHeight}px` : '0px',
           paddingBottom: keyboardHeight > 0 ? '0px' : 'var(--safe-bottom, 8px)',
           transform: swipeOffset > 0 ? `translateY(${swipeOffset}px)` : undefined,
           opacity: swipeOffset > 60 ? 0.6 : 1,
