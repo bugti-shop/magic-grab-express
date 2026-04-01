@@ -99,11 +99,12 @@ function usePaywallLogic() {
         // Web: use Supabase edge function for Stripe checkout
         const { data: { session } } = await supabase.auth.getSession();
         if (!session?.access_token) {
-          // Not logged in — fall back to Stripe payment links
+          // Not logged in — use Stripe payment links directly
           const { STRIPE_PAYMENT_LINKS } = await import('@/lib/billing');
           const link = STRIPE_PAYMENT_LINKS[selectedPlan];
           if (link) {
-            window.open(link, '_blank');
+            window.location.href = link;
+            closePaywall();
           }
           return;
         }
