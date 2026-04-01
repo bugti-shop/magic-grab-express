@@ -83,13 +83,6 @@ All colors MUST be HSL.
     --accent-indigo-foreground: 0 0% 100%;
   }
 
-  /* Android native with overlay:false — WebView is already inset by system bars.
-     Force safe-area to 0 to prevent double-padding. */
-  body.android-app {
-    --safe-top: 0px;
-    --safe-bottom: 0px;
-  }
-
   .dark,
   .ocean,
   .forest,
