@@ -95,7 +95,14 @@ function usePaywallLogic() {
           setTimeout(() => setAdminError(''), 4000);
         }
       } else {
-        await unlockPro();
+        // Web: open Stripe Payment Link in new tab
+        const { STRIPE_PAYMENT_LINKS } = await import('@/lib/billing');
+        const link = STRIPE_PAYMENT_LINKS[selectedPlan];
+        if (link) {
+          window.open(link, '_blank');
+        } else {
+          await unlockPro();
+        }
       }
     } catch (error: any) {
       if (error.code !== 'PURCHASE_CANCELLED' && !error.userCancelled) {
