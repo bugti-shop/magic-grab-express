@@ -1680,7 +1680,11 @@ export const RichTextEditor = ({
   }, [content, reattachImageListeners, reattachTableListeners, reattachAudioListeners, reattachFileListeners]);
 
   // Adjust toolbar position when the on-screen keyboard appears using VisualViewport
+  // On Android native, the Capacitor Keyboard plugin (useKeyboardHeight in App.tsx)
+  // already sets --keyboard-inset accurately, so skip the local visualViewport logic.
+  const isAndroidNativeEditor = typeof document !== 'undefined' && document.body.classList.contains('android-app');
   useEffect(() => {
+    if (isAndroidNativeEditor) return; // Capacitor plugin handles this
     const vv = (window as any).visualViewport as VisualViewport | undefined;
     const setInset = () => {
       if (!vv) return;
@@ -1698,7 +1702,7 @@ export const RichTextEditor = ({
         vv.removeEventListener('scroll', setInset);
       }
     };
-  }, []);
+  }, [isAndroidNativeEditor]);
 
   // Handle table context menu (right-click or long-press on table cells)
   useEffect(() => {
