@@ -611,6 +611,11 @@ table th[contenteditable="true"]:hover {
   min-height: 100dvh;
 }
 
+/* On Android native, use 100% to fill the actual WebView instead of 100vh */
+.android-stretch .min-h-screen-dynamic {
+  min-height: 100%;
+}
+
 /* Responsive text sizing */
 .text-responsive-xs {
   font-size: clamp(0.625rem, 2.5vw, 0.75rem);
