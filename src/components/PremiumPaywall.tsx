@@ -146,8 +146,26 @@ function usePaywallLogic() {
           setTimeout(() => setAdminError(''), 4000);
         }
       } else {
-        setAdminError(t('onboarding.paywall.restoreOnlyMobile'));
-        setTimeout(() => setAdminError(''), 3000);
+        // Web: check Stripe subscription status
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session?.access_token) {
+          setAdminError('Please log in to restore purchases');
+          setTimeout(() => setAdminError(''), 3000);
+          return;
+        }
+
+        const { data, error } = await supabase.functions.invoke('check-subscription', {
+          headers: { Authorization: `Bearer ${session.access_token}` },
+        });
+
+        if (data?.subscribed) {
+          // Trigger re-check in context
+          window.dispatchEvent(new Event('stripeSubscriptionRestored'));
+          closePaywall();
+        } else {
+          setAdminError(t('onboarding.paywall.noActivePurchases'));
+          setTimeout(() => setAdminError(''), 4000);
+        }
       }
     } catch (error: any) {
       console.error('Restore failed:', error);
