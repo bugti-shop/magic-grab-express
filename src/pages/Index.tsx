@@ -783,7 +783,7 @@ const Index = () => {
         style={{
           WebkitTransform: 'translateZ(0)',
           transform: 'translateZ(0)',
-          paddingTop: 'env(safe-area-inset-top)',
+          paddingTop: 'var(--safe-top, 0px)',
         }}
       >
         <div className="container mx-auto px-2 xs:px-3 sm:px-4 py-2">
