@@ -114,8 +114,11 @@ export const TaskInputSheet = ({ isOpen, onClose, onAddTask, folders, selectedFo
   }, [onClose]);
   
   // Keyboard height detection.
+  // On Android native the WebView resizes (adjustResize) when keyboard opens,
+  // so the sheet at bottom:0 already sits above the keyboard — don't double-lift.
   const keyboardHeight = useKeyboardHeight();
-  const shouldLiftForKeyboard = keyboardHeight > 0;
+  const isAndroidNative = typeof document !== 'undefined' && document.body.classList.contains('android-app');
+  const shouldLiftForKeyboard = keyboardHeight > 0 && !isAndroidNative;
   
   // Load custom priorities
   const { priorities, getPriorityColor, getPriorityName } = usePriorities();
