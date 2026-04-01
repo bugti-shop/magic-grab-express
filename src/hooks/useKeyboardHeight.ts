@@ -13,6 +13,21 @@ export const useKeyboardHeight = () => {
 
   useEffect(() => {
     const isNative = Capacitor.isNativePlatform();
+    const normalizeNativeHeight = (height: number) => {
+      if (typeof window === 'undefined' || Capacitor.getPlatform() !== 'android') {
+        return height;
+      }
+
+      const dpr = window.devicePixelRatio || 1;
+      const cssHeight = height / dpr;
+      const looksLikePhysicalPixels =
+        dpr > 1 &&
+        height > window.innerHeight * 0.55 &&
+        cssHeight > 120 &&
+        cssHeight < window.innerHeight * 0.7;
+
+      return Math.max(0, Math.round(looksLikePhysicalPixels ? cssHeight : height));
+    };
 
     // Native platform: Use Capacitor Keyboard plugin
     if (isNative) {
@@ -30,7 +45,7 @@ export const useKeyboardHeight = () => {
 
           // Use keyboardDidShow for accurate final height (especially on Android)
           showListener = await Keyboard.addListener('keyboardDidShow', (info) => {
-            const height = info.keyboardHeight;
+            const height = normalizeNativeHeight(info.keyboardHeight);
             setKeyboardHeight(height);
             document.documentElement.style.setProperty('--keyboard-inset', `${height}px`);
           });

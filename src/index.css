@@ -754,12 +754,3 @@ body.onboarding-active [data-vaul-drawer] {
 }
 
 
-/* Android native app: remove extra bottom safe area spacing caused by edge-to-edge mode.
-   Android's software navigation bar doesn't need safe-area-inset-bottom padding
-   since the WebView content area already accounts for it. */
-body.android-app .fixed.bottom-0 {
-  padding-bottom: 0px !important;
-}
-body.android-app {
-  --sab: env(safe-area-inset-bottom, 0px);
-}
