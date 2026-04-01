@@ -494,6 +494,41 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [isAdminBypass]);
 
+  // Check for Stripe checkout success redirect
+  useEffect(() => {
+    if (Capacitor.isNativePlatform()) return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('stripe_success') === 'true') {
+      console.log('Stripe checkout success detected!');
+      // Mark as subscribed locally
+      setRcIsPro(true);
+      try { localStorage.setItem('flowist_trial_used', 'true'); } catch {}
+      try { localStorage.setItem('flowist_stripe_subscribed', 'true'); } catch {}
+      const plan = params.get('plan');
+      if (plan) {
+        (window as any).__stripePlanType = plan;
+      }
+      // Clean URL
+      const url = new URL(window.location.href);
+      url.searchParams.delete('stripe_success');
+      url.searchParams.delete('plan');
+      window.history.replaceState({}, '', url.pathname);
+      // Close paywall if open
+      setShowPaywall(false);
+      setPaywallFeature(null);
+    }
+  }, []);
+
+  // Restore local Stripe subscription on mount
+  useEffect(() => {
+    if (Capacitor.isNativePlatform()) return;
+    try {
+      if (localStorage.getItem('flowist_stripe_subscribed') === 'true') {
+        setRcIsPro(true);
+      }
+    } catch {}
+  }, []);
+
   // Auto-initialize RevenueCat on mount with Firebase UID for subscription association
   useEffect(() => {
     if (!isInitialized && Capacitor.isNativePlatform()) {

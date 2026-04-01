@@ -105,24 +105,16 @@ function usePaywallLogic() {
           setTimeout(() => setAdminError(''), 4000);
         }
       } else {
-        // Web: use Supabase edge function for Stripe checkout
+        // Web: use Supabase edge function for Stripe checkout (works with or without auth)
         const { data: { session } } = await supabase.auth.getSession();
-        if (!session?.access_token) {
-          // Not logged in — use Stripe payment links directly
-          const { STRIPE_PAYMENT_LINKS } = await import('@/lib/billing');
-          const link = STRIPE_PAYMENT_LINKS[selectedPlan];
-          if (link) {
-            // Mark trial as used on this device
-            try { localStorage.setItem('flowist_trial_used', 'true'); } catch {}
-            window.location.href = link;
-            closePaywall();
-          }
-          return;
+        const headers: Record<string, string> = {};
+        if (session?.access_token) {
+          headers['Authorization'] = `Bearer ${session.access_token}`;
         }
 
         const { data, error } = await supabase.functions.invoke('create-checkout', {
           body: { planType: selectedPlan, hadTrialBefore: hasUsedTrial },
-          headers: { Authorization: `Bearer ${session.access_token}` },
+          headers,
         });
 
         if (error || !data?.url) {
