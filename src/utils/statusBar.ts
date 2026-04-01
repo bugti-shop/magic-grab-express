@@ -48,6 +48,11 @@ export const updateStatusBarStyle = async (isDarkMode: boolean) => {
     await StatusBar.setStyle({
       style: isDarkMode ? Style.Dark : Style.Light,
     });
+    
+    // Update Android status bar background color to match theme
+    if (Capacitor.getPlatform() === 'android') {
+      await StatusBar.setBackgroundColor({ color: isDarkMode ? '#1a1a2e' : '#ffffff' });
+    }
   } catch (error) {
     console.warn('[StatusBar] Style update failed:', error);
   }
