@@ -614,10 +614,17 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
   const tier: SubscriptionTier = isPro ? 'premium' : 'free';
   const isLoading = localLoading || rcLoading || (Capacitor.isNativePlatform() && !isInitialized);
 
-  // Detect plan type from RevenueCat entitlement
+  // Detect plan type from RevenueCat entitlement or Stripe
   const planType: SubscriptionPlanType = useMemo(() => {
     if (!isPro) return 'none';
     if (localProAccess) return 'monthly';
+    // Web Stripe plan type
+    const stripePlan = (window as any).__stripePlanType;
+    if (!Capacitor.isNativePlatform() && stripePlan) {
+      if (stripePlan === 'weekly') return 'weekly';
+      if (stripePlan === 'monthly') return 'monthly';
+      if (stripePlan === 'yearly') return 'yearly';
+    }
     if (!customerInfo) return 'none';
     const entitlement = customerInfo.entitlements.active[ENTITLEMENT_ID];
     if (!entitlement) return 'none';
