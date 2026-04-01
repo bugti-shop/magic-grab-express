@@ -45,15 +45,16 @@ export const configureStatusBar = async (isDarkMode: boolean, themeId?: string) 
   try {
     const platform = Capacitor.getPlatform();
 
-    await StatusBar.setOverlaysWebView({ overlay: platform === 'ios' });
+    // Both iOS and Android: overlay content behind status bar for seamless look
+    await StatusBar.setOverlaysWebView({ overlay: true });
 
     await StatusBar.setStyle({
       style: isDarkMode ? Style.Light : Style.Dark,
     });
 
     if (platform === 'android') {
-      const color = (themeId && THEME_STATUS_BAR_COLORS[themeId]) || (isDarkMode ? '#152518' : '#ffffff');
-      await StatusBar.setBackgroundColor({ color });
+      // Transparent status bar — app content extends behind it
+      await StatusBar.setBackgroundColor({ color: '#00000000' });
     }
 
     console.log('[StatusBar] Configured for theme:', themeId || (isDarkMode ? 'dark' : 'light'));
@@ -74,8 +75,8 @@ export const updateStatusBarStyle = async (isDarkMode: boolean, themeId?: string
     });
 
     if (Capacitor.getPlatform() === 'android') {
-      const color = (themeId && THEME_STATUS_BAR_COLORS[themeId]) || (isDarkMode ? '#152518' : '#ffffff');
-      await StatusBar.setBackgroundColor({ color });
+      // Keep transparent so app extends behind status bar
+      await StatusBar.setBackgroundColor({ color: '#00000000' });
     }
   } catch (error) {
     console.warn('[StatusBar] Style update failed:', error);

@@ -83,10 +83,10 @@ All colors MUST be HSL.
     --accent-indigo-foreground: 0 0% 100%;
   }
 
-  /* Android native with overlay:false already sits between system bars.
-     Force safe-area vars to zero so screens match the web layout exactly. */
+  /* Android edge-to-edge: status bar is now overlay (transparent).
+     Let real safe-area-inset-top work so headers get proper padding.
+     Bottom safe area stays 0 — we handle nav bar via native styles. */
   body.android-app {
-    --safe-top: 0px;
     --safe-bottom: 0px;
   }
 
