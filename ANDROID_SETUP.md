@@ -247,3 +247,53 @@ dependencies {
 | Firebase Realtime Database SDK        | Supabase PostgreSQL (via JS client)         |
 | Firebase Gradle plugins & BoM         | **Removed** — not needed                    |
 | `firebase-auth`, `firebase-database`  | **Removed** from `build.gradle`             |
+
+---
+
+## 🎨 Fix Bottom Navigation Bar Gap (Edge-to-Edge)
+
+The app now uses a transparent overlay status bar. To also fix the **bottom system navigation bar gap** (light gray bar below the app), you need to set the navigation bar color in your Android theme.
+
+### Step 1: Open `android/app/src/main/res/values/styles.xml`
+
+Add these lines inside the `<style>` tag:
+
+```xml
+<style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+    <!-- Existing items... -->
+    
+    <!-- Match navigation bar to app background -->
+    <item name="android:navigationBarColor">@android:color/white</item>
+    <item name="android:windowLightNavigationBar">true</item>
+</style>
+```
+
+### Step 2: For Dark Themes
+
+If your app supports dark mode, also create `android/app/src/main/res/values-night/styles.xml`:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:navigationBarColor">#152518</item>
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+</resources>
+```
+
+### Step 3: Edge-to-Edge (Optional, API 35+)
+
+For full edge-to-edge on Android 15+, add this to `MainActivity.java`:
+
+```java
+import androidx.core.view.WindowCompat;
+
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+}
+```
+
+Then run `npx cap sync android` to apply changes.
