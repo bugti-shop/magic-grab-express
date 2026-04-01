@@ -12,18 +12,18 @@ export const configureStatusBar = async (isDarkMode: boolean) => {
   try {
     const platform = Capacitor.getPlatform();
     
-    // Overlay on both platforms so WebView goes full-screen and
-    // env(safe-area-inset-*) works identically to the web.
-    await StatusBar.setOverlaysWebView({ overlay: true });
+    // iOS uses overlay so safe-area works normally.
+    // Android should not overlay so the layout matches the web exactly.
+    await StatusBar.setOverlaysWebView({ overlay: platform === 'ios' });
     
     // Set status bar icons to contrast with app background
     await StatusBar.setStyle({
       style: isDarkMode ? Style.Dark : Style.Light,
     });
 
-    // Transparent background on both platforms when overlaying
+    // Android status bar should blend with the app background
     if (platform === 'android') {
-      await StatusBar.setBackgroundColor({ color: '#00000000' });
+      await StatusBar.setBackgroundColor({ color: isDarkMode ? '#1a1a2e' : '#ffffff' });
     }
 
     console.log('[StatusBar] Configured successfully for', isDarkMode ? 'dark' : 'light', 'mode');
