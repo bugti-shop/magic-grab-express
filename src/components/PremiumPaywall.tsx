@@ -224,6 +224,16 @@ function PaywallFooter({ logic }: { logic: ReturnType<typeof usePaywallLogic> })
   return (
     <div className="flex flex-col items-center gap-2 mt-3">
       {adminError && <p className="text-xs" style={{ color: 'hsl(0 84.2% 60.2%)' }}>{adminError}</p>}
+      {showRestoreEmail && (
+        <div className="flex items-center gap-2 mt-1">
+          <input type="email" value={restoreEmail} onChange={(e) => setRestoreEmail(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleRestore()}
+            placeholder="Enter subscription email" autoComplete="email"
+            className="h-8 w-48 rounded-md px-2 text-sm" style={{ border: '1px solid hsl(0 0% 89.8%)', background: 'hsl(0 0% 100%)', color: 'hsl(0 0% 3.9%)' }} />
+          <button onClick={handleRestore} disabled={isRestoring} className="h-8 px-3 rounded-md bg-primary text-primary-foreground text-sm font-medium">
+            {isRestoring ? '...' : 'Check'}
+          </button>
+        </div>
+      )}
       <div className="flex items-center gap-3">
         <button onClick={handleRestore} disabled={isRestoring} className="text-xs underline disabled:opacity-50" style={{ color: 'hsl(0 0% 45.1%)' }}>
           {isRestoring ? t('onboarding.paywall.restoring') : t('onboarding.paywall.restorePurchase')}
