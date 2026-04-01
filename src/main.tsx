@@ -210,7 +210,7 @@ scheduleDeferred(async () => {
 
     // Configure status bar
     const theme = await getSetting<string>('theme', 'light');
-    await configureStatusBar(theme !== 'light');
+    await configureStatusBar(theme !== 'light', theme || 'light');
   } catch (error) {
     console.error('Deferred initialization error:', error);
   }

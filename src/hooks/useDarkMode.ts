@@ -61,7 +61,7 @@ export const useDarkMode = () => {
     }
     
     // Update status bar to match theme
-    updateStatusBarStyle(currentTheme !== 'light');
+    updateStatusBarStyle(currentTheme !== 'light', currentTheme);
   }, [currentTheme, isLoaded]);
 
   // Cycle through all dark themes on toggle
