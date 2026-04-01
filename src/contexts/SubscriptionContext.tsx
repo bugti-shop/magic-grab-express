@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect, useCallback, useMemo, R
 import { getSetting, setSetting } from '@/utils/settingsStorage';
 import { getStoredGoogleUser } from '@/utils/googleAuth';
 import { Capacitor } from '@capacitor/core';
+import { supabase } from '@/lib/supabase';
 import {
   Purchases,
   LOG_LEVEL,
