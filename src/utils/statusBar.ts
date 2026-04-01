@@ -10,18 +10,24 @@ export const configureStatusBar = async (isDarkMode: boolean) => {
   }
 
   try {
-    // Make status bar overlay the WebView (transparent background)
-    await StatusBar.setOverlaysWebView({ overlay: true });
+    const platform = Capacitor.getPlatform();
+    
+    // On iOS: overlay WebView for edge-to-edge (safe areas work properly)
+    // On Android: do NOT overlay so the system nav bar doesn't create blank space
+    if (platform === 'ios') {
+      await StatusBar.setOverlaysWebView({ overlay: true });
+    } else {
+      await StatusBar.setOverlaysWebView({ overlay: false });
+    }
     
     // Set status bar icons to contrast with app background
-    // Dark mode = light icons, Light mode = dark icons
     await StatusBar.setStyle({
       style: isDarkMode ? Style.Dark : Style.Light,
     });
 
-    // Set background color to transparent
-    if (Capacitor.getPlatform() === 'android') {
-      await StatusBar.setBackgroundColor({ color: '#00000000' });
+    // Set background color — transparent on iOS, match theme on Android
+    if (platform === 'android') {
+      await StatusBar.setBackgroundColor({ color: isDarkMode ? '#1a1a2e' : '#ffffff' });
     }
 
     console.log('[StatusBar] Configured successfully for', isDarkMode ? 'dark' : 'light', 'mode');
