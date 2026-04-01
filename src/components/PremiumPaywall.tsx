@@ -96,14 +96,32 @@ function usePaywallLogic() {
           setTimeout(() => setAdminError(''), 4000);
         }
       } else {
-        // Web: open Stripe Payment Link in new tab
-        const { STRIPE_PAYMENT_LINKS } = await import('@/lib/billing');
-        const link = STRIPE_PAYMENT_LINKS[selectedPlan];
-        if (link) {
-          window.open(link, '_blank');
-        } else {
-          await unlockPro();
+        // Web: use Supabase edge function for Stripe checkout
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session?.access_token) {
+          // Not logged in — fall back to Stripe payment links
+          const { STRIPE_PAYMENT_LINKS } = await import('@/lib/billing');
+          const link = STRIPE_PAYMENT_LINKS[selectedPlan];
+          if (link) {
+            window.open(link, '_blank');
+          }
+          return;
         }
+
+        const { data, error } = await supabase.functions.invoke('create-checkout', {
+          body: { planType: selectedPlan },
+          headers: { Authorization: `Bearer ${session.access_token}` },
+        });
+
+        if (error || !data?.url) {
+          console.error('Checkout error:', error || data?.error);
+          setAdminError(data?.error || 'Failed to create checkout session');
+          setTimeout(() => setAdminError(''), 5000);
+          return;
+        }
+
+        window.open(data.url, '_blank');
+        closePaywall();
       }
     } catch (error: any) {
       if (error.code !== 'PURCHASE_CANCELLED' && !error.userCancelled) {
