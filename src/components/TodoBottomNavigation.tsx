@@ -97,7 +97,7 @@ export const TodoBottomNavigation = () => {
     <nav 
       className="fixed bottom-0 left-0 right-0 bg-background border-t border-border z-40"
       style={{
-        paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+        paddingBottom: 'var(--safe-bottom, 0px)',
         WebkitTransform: 'translateZ(0)',
         transform: 'translateZ(0)',
       }}

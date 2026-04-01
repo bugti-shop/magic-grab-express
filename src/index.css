@@ -14,6 +14,8 @@ All colors MUST be HSL.
 @layer base {
   :root {
     --keyboard-inset: 0px;
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
@@ -79,6 +81,13 @@ All colors MUST be HSL.
     --accent-teal-foreground: 0 0% 100%;
     --accent-indigo: 239 84% 67%;
     --accent-indigo-foreground: 0 0% 100%;
+  }
+
+  /* Android native with overlay:false — WebView is already inset by system bars.
+     Force safe-area to 0 to prevent double-padding. */
+  body.android-app {
+    --safe-top: 0px;
+    --safe-bottom: 0px;
   }
 
   .dark,

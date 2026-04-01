@@ -35,9 +35,11 @@ export const TodoLayout = ({ children, title, searchValue, onSearchChange }: Tod
           WebkitTransform: 'translateZ(0)',
           transform: 'translateZ(0)',
           paddingTop: 'calc(env(safe-area-inset-top) + 12px)',
-        }}
+        } as React.CSSProperties}
+        // Android-safe override via CSS var
+        data-safe-top
       >
-        <div className="container mx-auto px-3 sm:px-4 py-2">
+        <div className="container mx-auto px-3 sm:px-4 py-2" style={{ paddingTop: 'var(--safe-top, 0px)' }}>
           <div className="flex items-center justify-between mb-3 sm:mb-4 gap-2">
             <div className="flex items-center gap-2 min-w-0 flex-shrink-0">
               <AppLogo />
