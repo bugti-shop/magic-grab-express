@@ -2,7 +2,11 @@ import { Capacitor } from '@capacitor/core';
 import { StatusBar, Style } from '@capacitor/status-bar';
 
 /**
- * Configure the Android/iOS status bar to blend seamlessly with the app
+ * Configure the Android/iOS status bar to blend seamlessly with the app.
+ *
+ * Capacitor Style enum:
+ *   Style.Dark  → dark (black) icons — use on LIGHT backgrounds
+ *   Style.Light → light (white) icons — use on DARK backgrounds
  */
 export const configureStatusBar = async (isDarkMode: boolean) => {
   if (!Capacitor.isNativePlatform()) {
@@ -11,17 +15,17 @@ export const configureStatusBar = async (isDarkMode: boolean) => {
 
   try {
     const platform = Capacitor.getPlatform();
-    
+
     // iOS uses overlay so safe-area works normally.
     // Android should not overlay so the layout matches the web exactly.
     await StatusBar.setOverlaysWebView({ overlay: platform === 'ios' });
-    
-    // Set status bar icons to contrast with app background
+
+    // White icons on dark bg, dark icons on light bg
     await StatusBar.setStyle({
-      style: isDarkMode ? Style.Dark : Style.Light,
+      style: isDarkMode ? Style.Light : Style.Dark,
     });
 
-    // Android status bar should blend with the app background
+    // Android status bar background should blend with the app
     if (platform === 'android') {
       await StatusBar.setBackgroundColor({ color: isDarkMode ? '#1a1a2e' : '#ffffff' });
     }
@@ -42,10 +46,9 @@ export const updateStatusBarStyle = async (isDarkMode: boolean) => {
 
   try {
     await StatusBar.setStyle({
-      style: isDarkMode ? Style.Dark : Style.Light,
+      style: isDarkMode ? Style.Light : Style.Dark,
     });
-    
-    // Update Android status bar background color to match theme
+
     if (Capacitor.getPlatform() === 'android') {
       await StatusBar.setBackgroundColor({ color: isDarkMode ? '#1a1a2e' : '#ffffff' });
     }
