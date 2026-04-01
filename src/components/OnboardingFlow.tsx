@@ -2162,7 +2162,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
       </AnimatePresence>
 
       {/* Bottom Next button */}
-      <div className="px-6 pb-6 pt-2 flex flex-col items-center">
+      <div className="px-6 pb-3 pt-2 flex flex-col items-center" style={{ paddingBottom: 'max(var(--safe-bottom, 0px), 12px)' }}>
         <motion.button
           onClick={goNext}
           disabled={!currentValid}
