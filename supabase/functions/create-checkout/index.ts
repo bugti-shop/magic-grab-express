@@ -15,7 +15,7 @@ const PRICE_IDS: Record<string, string> = {
   yearly: "price_1THRzxFAPtKh08jGoDkVIric",
 };
 
-// Plans with free trial (8 days)
+// Plans eligible for free trial
 const TRIAL_PLANS = ["monthly", "yearly"];
 const TRIAL_DAYS = 8;
 
@@ -38,7 +38,7 @@ serve(async (req) => {
     if (!user?.email) throw new Error("User not authenticated or email not available");
 
     // Parse request body
-    const { planType } = await req.json();
+    const { planType, hadTrialBefore } = await req.json();
     if (!planType || !PRICE_IDS[planType]) {
       throw new Error(`Invalid plan type: ${planType}. Must be one of: ${Object.keys(PRICE_IDS).join(", ")}`);
     }
@@ -51,9 +51,29 @@ serve(async (req) => {
     // Check if customer already exists
     const customers = await stripe.customers.list({ email: user.email, limit: 1 });
     let customerId: string | undefined;
+    let customerHadTrial = false;
+
     if (customers.data.length > 0) {
       customerId = customers.data[0].id;
+
+      // Check if this customer ever had a trialing subscription (any status)
+      const allSubs = await stripe.subscriptions.list({
+        customer: customerId,
+        limit: 100,
+      });
+      customerHadTrial = allSubs.data.some(
+        (sub) => sub.trial_start !== null
+      );
     }
+
+    // Determine if trial should be offered:
+    // - Plan must be eligible for trial
+    // - Device must not have used trial before (hadTrialBefore from frontend)
+    // - Customer must not have had a trial on Stripe before
+    const shouldOfferTrial =
+      TRIAL_PLANS.includes(planType) &&
+      !hadTrialBefore &&
+      !customerHadTrial;
 
     // Build session config
     const sessionConfig: any = {
@@ -66,8 +86,8 @@ serve(async (req) => {
       metadata: { user_id: user.id, plan_type: planType },
     };
 
-    // Add free trial for eligible plans
-    if (TRIAL_PLANS.includes(planType)) {
+    // Only add free trial if eligible
+    if (shouldOfferTrial) {
       sessionConfig.subscription_data = {
         trial_period_days: TRIAL_DAYS,
       };

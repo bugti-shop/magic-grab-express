@@ -83,6 +83,13 @@ function usePaywallLogic() {
 
   const currentPlan = PLANS.find(p => p.id === selectedPlan)!;
 
+  // Check if this device has already used a free trial
+  const hasUsedTrial = useMemo(() => {
+    try {
+      return localStorage.getItem('flowist_trial_used') === 'true';
+    } catch { return false; }
+  }, []);
+
   const handlePurchase = async () => {
     setIsPurchasing(true);
     setAdminError('');
@@ -90,6 +97,8 @@ function usePaywallLogic() {
       if (Capacitor.isNativePlatform()) {
         const success = await purchase(selectedPlan);
         if (success) {
+          // Mark trial as used on this device
+          try { localStorage.setItem('flowist_trial_used', 'true'); } catch {}
           closePaywall();
         } else {
           setAdminError(t('onboarding.paywall.purchaseCancelled'));
@@ -103,6 +112,8 @@ function usePaywallLogic() {
           const { STRIPE_PAYMENT_LINKS } = await import('@/lib/billing');
           const link = STRIPE_PAYMENT_LINKS[selectedPlan];
           if (link) {
+            // Mark trial as used on this device
+            try { localStorage.setItem('flowist_trial_used', 'true'); } catch {}
             window.location.href = link;
             closePaywall();
           }
@@ -110,7 +121,7 @@ function usePaywallLogic() {
         }
 
         const { data, error } = await supabase.functions.invoke('create-checkout', {
-          body: { planType: selectedPlan },
+          body: { planType: selectedPlan, hadTrialBefore: hasUsedTrial },
           headers: { Authorization: `Bearer ${session.access_token}` },
         });
 
@@ -121,7 +132,9 @@ function usePaywallLogic() {
           return;
         }
 
-        window.open(data.url, '_blank');
+        // Mark trial as used on this device
+        try { localStorage.setItem('flowist_trial_used', 'true'); } catch {}
+        window.location.href = data.url;
         closePaywall();
       }
     } catch (error: any) {
@@ -190,7 +203,7 @@ function usePaywallLogic() {
   return {
     t, showPaywall, selectedPlan, setSelectedPlan, isPurchasing, isRestoring,
     adminCode, setAdminCode, showAdminInput, setShowAdminInput, adminError,
-    PLANS, currentPlan, handlePurchase, handleRestore, handleAccessCode,
+    PLANS, currentPlan, handlePurchase, handleRestore, handleAccessCode, hasUsedTrial,
   };
 }
 
@@ -225,7 +238,7 @@ function PaywallFooter({ logic }: { logic: ReturnType<typeof usePaywallLogic> })
    VARIANT A — Timeline Feature List (Original)
    ═══════════════════════════════════════════ */
 function PaywallVariantA({ logic }: { logic: ReturnType<typeof usePaywallLogic> }) {
-  const { t, selectedPlan, setSelectedPlan, isPurchasing, PLANS, currentPlan, handlePurchase } = logic;
+  const { t, selectedPlan, setSelectedPlan, isPurchasing, PLANS, currentPlan, handlePurchase, hasUsedTrial } = logic;
 
   return (
     <div className="fixed inset-0 z-[200] flex flex-col" style={{ paddingTop: 'calc(var(--safe-top, 0px) + 12px)', paddingBottom: 'max(var(--safe-bottom, 0px), 12px)', background: 'hsl(0 0% 100%)', color: 'hsl(0 0% 3.9%)', fontFamily: "'Nunito Sans', sans-serif" }}>
@@ -256,7 +269,7 @@ function PaywallVariantA({ logic }: { logic: ReturnType<typeof usePaywallLogic> 
             </motion.div>
           ))}
 
-          {(selectedPlan === 'monthly' || selectedPlan === 'yearly') && (
+          {!hasUsedTrial && (selectedPlan === 'monthly' || selectedPlan === 'yearly') && (
             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }} className="flex items-start gap-3 mb-6 relative">
               <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground z-10 flex-shrink-0"><Gift size={16} strokeWidth={2} /></div>
               <div>
@@ -287,12 +300,12 @@ function PaywallVariantA({ logic }: { logic: ReturnType<typeof usePaywallLogic> 
             ))}
           </div>
 
-          {currentPlan.hasTrial && (
+          {!hasUsedTrial && currentPlan.hasTrial && (
             <p className="font-normal text-sm text-center mt-4" style={{ color: 'hsl(0 0% 45.1%)' }}>{t('onboarding.paywall.freeTrialThen', { price: currentPlan.price })}</p>
           )}
 
           <button onClick={() => { triggerTripleHeavyHaptic(); handlePurchase(); }} disabled={isPurchasing} className="w-80 mt-2 btn-duo disabled:opacity-50">
-            {isPurchasing ? t('onboarding.paywall.processing') : currentPlan.hasTrial ? t('onboarding.paywall.tryForFree', { price: currentPlan.trialPriceString || '$0.00' }) : t('onboarding.paywall.continueWith', { price: currentPlan.price })}
+            {isPurchasing ? t('onboarding.paywall.processing') : (!hasUsedTrial && currentPlan.hasTrial) ? t('onboarding.paywall.tryForFree', { price: currentPlan.trialPriceString || '$0.00' }) : t('onboarding.paywall.continueWith', { price: currentPlan.price })}
           </button>
 
           <p className="text-[13px] font-medium text-center mt-3" style={{ color: 'hsl(0 0% 45.1%)' }}>
