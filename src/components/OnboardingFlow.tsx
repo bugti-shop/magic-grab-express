@@ -984,8 +984,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
     else if (step === 36) setStep(35); // back from why fail → slowdown
     else if (step === 6) setStep(36); // back from note → why fail
     else if (step === 13) setStep(6); // back from INFO → note (sketch removed from here)
-    else if (step === 14) setStep(13); // back from task → INFO
-    else if (step === 25) setStep(14); // back from showcase → task
+    else if (step === 25) setStep(13); // back from showcase → INFO (skip task step 14)
   }, [step, selectedJourneyId]);
 
   const handleImagePick = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
