@@ -1,8 +1,19 @@
 import React, { Suspense } from "react";
 import { createRoot } from "react-dom/client";
+import { Capacitor } from "@capacitor/core";
 import App from "./App.tsx";
 import "./index.css";
 import "./i18n";
+
+// Add platform class to body for platform-specific CSS
+if (Capacitor.isNativePlatform()) {
+  document.body.classList.add('native-app');
+  if (Capacitor.getPlatform() === 'android') {
+    document.body.classList.add('android-app');
+  } else if (Capacitor.getPlatform() === 'ios') {
+    document.body.classList.add('ios-app');
+  }
+}
 
 // Prevent PWA service worker in preview/iframe contexts
 const isInIframe = (() => {
