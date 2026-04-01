@@ -83,6 +83,13 @@ function usePaywallLogic() {
 
   const currentPlan = PLANS.find(p => p.id === selectedPlan)!;
 
+  // Check if this device has already used a free trial
+  const hasUsedTrial = useMemo(() => {
+    try {
+      return localStorage.getItem('flowist_trial_used') === 'true';
+    } catch { return false; }
+  }, []);
+
   const handlePurchase = async () => {
     setIsPurchasing(true);
     setAdminError('');
@@ -90,6 +97,8 @@ function usePaywallLogic() {
       if (Capacitor.isNativePlatform()) {
         const success = await purchase(selectedPlan);
         if (success) {
+          // Mark trial as used on this device
+          try { localStorage.setItem('flowist_trial_used', 'true'); } catch {}
           closePaywall();
         } else {
           setAdminError(t('onboarding.paywall.purchaseCancelled'));
@@ -103,6 +112,8 @@ function usePaywallLogic() {
           const { STRIPE_PAYMENT_LINKS } = await import('@/lib/billing');
           const link = STRIPE_PAYMENT_LINKS[selectedPlan];
           if (link) {
+            // Mark trial as used on this device
+            try { localStorage.setItem('flowist_trial_used', 'true'); } catch {}
             window.location.href = link;
             closePaywall();
           }
@@ -110,7 +121,7 @@ function usePaywallLogic() {
         }
 
         const { data, error } = await supabase.functions.invoke('create-checkout', {
-          body: { planType: selectedPlan },
+          body: { planType: selectedPlan, hadTrialBefore: hasUsedTrial },
           headers: { Authorization: `Bearer ${session.access_token}` },
         });
 
@@ -121,7 +132,9 @@ function usePaywallLogic() {
           return;
         }
 
-        window.open(data.url, '_blank');
+        // Mark trial as used on this device
+        try { localStorage.setItem('flowist_trial_used', 'true'); } catch {}
+        window.location.href = data.url;
         closePaywall();
       }
     } catch (error: any) {
