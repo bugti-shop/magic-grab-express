@@ -24,19 +24,7 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  const supabaseClient = createClient(
-    Deno.env.get("SUPABASE_URL") ?? "",
-    Deno.env.get("SUPABASE_ANON_KEY") ?? ""
-  );
-
   try {
-    // Get authenticated user
-    const authHeader = req.headers.get("Authorization")!;
-    const token = authHeader.replace("Bearer ", "");
-    const { data } = await supabaseClient.auth.getUser(token);
-    const user = data.user;
-    if (!user?.email) throw new Error("User not authenticated or email not available");
-
     // Parse request body
     const { planType, hadTrialBefore } = await req.json();
     if (!planType || !PRICE_IDS[planType]) {
@@ -48,42 +36,58 @@ serve(async (req) => {
       apiVersion: "2025-08-27.basil",
     });
 
-    // Check if customer already exists
-    const customers = await stripe.customers.list({ email: user.email, limit: 1 });
+    // Try to get authenticated user (optional)
+    let userEmail: string | undefined;
+    let userId: string | undefined;
+    const authHeader = req.headers.get("Authorization");
+    if (authHeader && authHeader !== "Bearer ") {
+      try {
+        const supabaseClient = createClient(
+          Deno.env.get("SUPABASE_URL") ?? "",
+          Deno.env.get("SUPABASE_ANON_KEY") ?? ""
+        );
+        const token = authHeader.replace("Bearer ", "");
+        const { data } = await supabaseClient.auth.getUser(token);
+        userEmail = data.user?.email ?? undefined;
+        userId = data.user?.id ?? undefined;
+      } catch {
+        // Auth failed — continue without user
+      }
+    }
+
+    // Check if customer already exists (only if we have an email)
     let customerId: string | undefined;
     let customerHadTrial = false;
 
-    if (customers.data.length > 0) {
-      customerId = customers.data[0].id;
-
-      // Check if this customer ever had a trialing subscription (any status)
-      const allSubs = await stripe.subscriptions.list({
-        customer: customerId,
-        limit: 100,
-      });
-      customerHadTrial = allSubs.data.some(
-        (sub) => sub.trial_start !== null
-      );
+    if (userEmail) {
+      const customers = await stripe.customers.list({ email: userEmail, limit: 1 });
+      if (customers.data.length > 0) {
+        customerId = customers.data[0].id;
+        const allSubs = await stripe.subscriptions.list({
+          customer: customerId,
+          limit: 100,
+        });
+        customerHadTrial = allSubs.data.some((sub) => sub.trial_start !== null);
+      }
     }
 
-    // Determine if trial should be offered:
-    // - Plan must be eligible for trial
-    // - Device must not have used trial before (hadTrialBefore from frontend)
-    // - Customer must not have had a trial on Stripe before
+    // Determine trial eligibility
     const shouldOfferTrial =
       TRIAL_PLANS.includes(planType) &&
       !hadTrialBefore &&
       !customerHadTrial;
 
+    const origin = req.headers.get("origin") || "https://magic-grab-express.lovable.app";
+
     // Build session config
     const sessionConfig: any = {
       customer: customerId,
-      customer_email: customerId ? undefined : user.email,
+      customer_email: customerId ? undefined : userEmail,
       line_items: [{ price: PRICE_IDS[planType], quantity: 1 }],
       mode: "subscription",
-      success_url: `${req.headers.get("origin")}/`,
-      cancel_url: `${req.headers.get("origin")}/`,
-      metadata: { user_id: user.id, plan_type: planType },
+      success_url: `${origin}/?stripe_success=true&plan=${planType}`,
+      cancel_url: `${origin}/`,
+      metadata: { user_id: userId || "anonymous", plan_type: planType },
     };
 
     // Only add free trial if eligible
@@ -101,6 +105,7 @@ serve(async (req) => {
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
+    console.error("create-checkout error:", message);
     return new Response(JSON.stringify({ error: message }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 500,
