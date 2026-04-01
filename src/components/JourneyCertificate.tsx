@@ -163,7 +163,7 @@ export const JourneyCertificate = ({ open, onClose, journey, progress }: Journey
           />
         )}
         {/* Header */}
-        <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-sm border-b px-4 py-3 pt-[calc(env(safe-area-inset-top)+12px)] flex items-center justify-between">
+        <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-sm border-b px-4 py-3 pt-[calc(var(--safe-top, 0px) + 12px)] flex items-center justify-between">
           <h2 className="text-lg font-bold">Journey Certificate</h2>
           <button onClick={onClose} className="p-2 rounded-full hover:bg-muted">
             <X className="h-5 w-5" />
