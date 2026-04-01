@@ -476,9 +476,11 @@ export const WordToolbar = ({
   // Helper to stop blinking: prevent focus steal on all popover interactions
   const preventFocus = (e: Event | React.SyntheticEvent) => e.preventDefault();
 
+  const isAndroidNative = typeof document !== 'undefined' && document.body.classList.contains('android-app');
+
   return (
     <div
-      className="mx-3 mb-2"
+      className={cn("mx-3", isAndroidNative ? "mb-0.5" : "mb-2")}
     >
       <div
         className={cn(

@@ -7312,7 +7312,7 @@ export const SketchEditor = memo(({ initialData, onChange, onImageExport, classN
         style={{ paddingBottom: 'var(--safe-bottom, 0px)', maxWidth: '100vw' }}
       >
         <div
-          className="mx-3 mb-3 rounded-[26px] border border-border/20 bg-card overflow-hidden"
+          className={cn("mx-3 rounded-[26px] border border-border/20 bg-card overflow-hidden", document.body.classList.contains('android-app') ? "mb-0.5" : "mb-3")}
           style={{
             boxShadow: '0 8px 32px -4px rgba(0,0,0,0.18), 0 12px 20px -6px rgba(0,0,0,0.12), 0 2px 6px -2px rgba(0,0,0,0.06), inset 0 1px 0 0 rgba(255,255,255,0.5)',
           }}
