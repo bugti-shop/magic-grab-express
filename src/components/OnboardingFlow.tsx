@@ -14,7 +14,7 @@ import { NoteEditor } from '@/components/NoteEditor';
 import { TaskInputSheet } from '@/components/TaskInputSheet';
 import { ProfileImageCropper } from '@/components/ProfileImageCropper';
 import { LazyConfetti } from '@/components/LazyConfetti';
-import { triggerTripleHeavyHaptic } from '@/utils/haptics';
+import { triggerHaptic } from '@/utils/haptics';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
@@ -72,7 +72,7 @@ const PlanLoadingScreen = ({ onComplete, displayName }: { onComplete: () => void
       setCompletedSteps(stepIdx);
       if (elapsed >= duration) {
         clearInterval(timer);
-        triggerTripleHeavyHaptic();
+        triggerHaptic();
         setTimeout(onComplete, 600);
       }
     }, interval);
@@ -166,7 +166,7 @@ const OnboardingFolderCreation = ({ type, folders, setFolders, progressPercent, 
 
   const handleCreate = () => {
     if (!folderName.trim()) return;
-    triggerTripleHeavyHaptic();
+    triggerHaptic();
     const newFolder = { id: crypto.randomUUID(), name: folderName.trim(), color: selectedColor };
     setFolders([...folders, newFolder]);
     setFolderName('');
@@ -174,7 +174,7 @@ const OnboardingFolderCreation = ({ type, folders, setFolders, progressPercent, 
   };
 
   const handleRemove = (id: string) => {
-    triggerTripleHeavyHaptic();
+    triggerHaptic();
     setFolders(folders.filter(f => f.id !== id));
   };
 
@@ -266,7 +266,7 @@ const OnboardingFolderCreation = ({ type, folders, setFolders, progressPercent, 
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.3 + i * 0.04, type: 'spring', stiffness: 300 }}
-                onClick={() => { triggerTripleHeavyHaptic(); setSelectedColor(color); }}
+                onClick={() => { triggerHaptic(); setSelectedColor(color); }}
                 className="w-9 h-9 rounded-full flex items-center justify-center cursor-pointer transition-all duration-200"
                 style={{
                   backgroundColor: color,
@@ -353,7 +353,7 @@ const OnboardingFolderCreation = ({ type, folders, setFolders, progressPercent, 
       {/* Bottom button */}
       <div className="px-6 pb-6 pt-2" style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 24px)' }}>
         <motion.button
-          onClick={() => { triggerTripleHeavyHaptic(); goNext(); }}
+          onClick={() => { triggerHaptic(); goNext(); }}
           className="w-full py-3.5 rounded-2xl text-[17px] font-bold text-white"
           style={{
             background: folders.length > 0 ? 'linear-gradient(135deg, #1a1a1a 0%, #333 100%)' : '#888',
@@ -465,7 +465,7 @@ const OnboardingBatchTaskForm = ({ sections, folders, onAddTasks, onCancel }: {
             {sections.map(s => (
               <motion.button
                 key={s.id}
-                onClick={() => { triggerTripleHeavyHaptic(); setSelectedSection(selectedSection === s.id ? '' : s.id); }}
+                onClick={() => { triggerHaptic(); setSelectedSection(selectedSection === s.id ? '' : s.id); }}
                 className="px-3 py-1.5 rounded-xl text-[13px] font-medium cursor-pointer"
                 style={{
                   backgroundColor: selectedSection === s.id ? `${s.color}20` : '#f3f4f6',
@@ -489,7 +489,7 @@ const OnboardingBatchTaskForm = ({ sections, folders, onAddTasks, onCancel }: {
             {folders.map(f => (
               <motion.button
                 key={f.id}
-                onClick={() => { triggerTripleHeavyHaptic(); setSelectedFolder(selectedFolder === f.id ? '' : f.id); }}
+                onClick={() => { triggerHaptic(); setSelectedFolder(selectedFolder === f.id ? '' : f.id); }}
                 className="px-3 py-1.5 rounded-xl text-[13px] font-medium cursor-pointer"
                 style={{
                   backgroundColor: selectedFolder === f.id ? '#3c78f010' : '#f3f4f6',
@@ -512,7 +512,7 @@ const OnboardingBatchTaskForm = ({ sections, folders, onAddTasks, onCancel }: {
           {priorityOptions.map(p => (
             <motion.button
               key={p.value}
-              onClick={() => { triggerTripleHeavyHaptic(); setSelectedPriority(p.value); }}
+              onClick={() => { triggerHaptic(); setSelectedPriority(p.value); }}
               className="flex-1 py-2 rounded-xl text-[13px] font-medium cursor-pointer"
               style={{
                 backgroundColor: selectedPriority === p.value ? `${p.color}15` : '#f3f4f6',
@@ -531,7 +531,7 @@ const OnboardingBatchTaskForm = ({ sections, folders, onAddTasks, onCancel }: {
       <div className="flex flex-col gap-1.5">
         <span className="text-[12px] font-medium text-[#767b7e]">{t('common.dueDate', 'Due Date')}</span>
         <motion.button
-          onClick={() => { triggerTripleHeavyHaptic(); }}
+          onClick={() => { triggerHaptic(); }}
           className="relative w-full cursor-pointer"
           whileTap={{ scale: 0.98 }}
         >
@@ -550,7 +550,7 @@ const OnboardingBatchTaskForm = ({ sections, folders, onAddTasks, onCancel }: {
                 {selectedDate && (
                   <span
                     className="ml-auto text-[11px] underline"
-                    onClick={(e) => { e.stopPropagation(); setSelectedDate(undefined); triggerTripleHeavyHaptic(); }}
+                    onClick={(e) => { e.stopPropagation(); setSelectedDate(undefined); triggerHaptic(); }}
                   >
                     Clear
                   </span>
@@ -808,7 +808,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
   }, []);
 
   const handleToggleGoal = useCallback(async (option: string) => {
-    triggerTripleHeavyHaptic();
+    triggerHaptic();
     setSelectedGoal(prev => {
       const next = new Set(prev);
       if (next.has(option)) next.delete(option);
@@ -818,12 +818,12 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
   }, []);
 
   const handleSelectSource = useCallback(async (option: string) => {
-    triggerTripleHeavyHaptic();
+    triggerHaptic();
     setSelectedSource(option);
   }, []);
 
   const handleSelectPreviousApp = useCallback(async (option: string) => {
-    triggerTripleHeavyHaptic();
+    triggerHaptic();
     setSelectedPreviousApp(option);
   }, []);
 
@@ -838,7 +838,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
 
   const goNext = useCallback(async () => {
     try {
-    triggerTripleHeavyHaptic();
+    triggerHaptic();
 
     if (step === 0) {
       // Skip old question screens, go straight to profile
@@ -950,7 +950,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
   }, [step, selectedGoal, selectedSource, selectedPreviousApp, selectedFrustration, selectedTaskView, selectedDevices, selectedOffline, selectedUnfinished, selectedSlowdown, selectedWhyFail, userName, avatarPreview, onboardingNoteSaved, sketchSaved, showNotesFolderCreation, showTasksFolderCreation, notesFolders, tasksFolders, selectedJourneyId]);
 
   const handleFinishWelcome = useCallback(async () => {
-    triggerTripleHeavyHaptic();
+    triggerHaptic();
     // If user earned the first step badge, show celebration before paywall
     const earned = onboardingNoteSaved && sketchSaved && createdTasks.length > 0;
     if (earned && !firstStepShown) {
@@ -967,7 +967,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
   }, [onComplete, openPaywall, onboardingNoteSaved, sketchSaved, createdTasks.length, firstStepShown, userName]);
 
   const handleBack = useCallback(async () => {
-    await triggerTripleHeavyHaptic();
+    await triggerHaptic();
     if (step === 0) setStep(-3);
     else if (step === 3) setStep(0); // back from profile → pre-steps
     else if (step === 28) setStep(3); // back from previous app → profile
@@ -1142,7 +1142,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
                 transition={{ duration: 0.25, delay: 0.1 + i * 0.03 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={async () => {
-                  await triggerTripleHeavyHaptic();
+                  await triggerHaptic();
                   setSelectedLang(lang.code);
                   i18n.changeLanguage(lang.code);
                   localStorage.setItem('flowist_language', lang.code);
@@ -1177,7 +1177,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
-            onClick={async () => { await triggerTripleHeavyHaptic(); setStep(0); }}
+            onClick={async () => { await triggerHaptic(); setStep(0); }}
             className="w-full max-w-[340px] mx-auto py-3 rounded-2xl text-[16px] font-bold block"
             style={{ backgroundColor: '#333333', color: '#ffffff', boxShadow: '0 8px 0 0 #000000' }}
             whileTap={{ scale: 0.97 }}
@@ -1441,7 +1441,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
                 return updated;
               });
               setCreatedTask(task);
-              await triggerTripleHeavyHaptic();
+              await triggerHaptic();
             }}
             folders={onboardingFolders}
             onCreateFolder={(name) => {
@@ -1621,7 +1621,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: 0.15 + i * 0.06 }}
                 whileTap={{ scale: 0.97 }}
-                onClick={() => { triggerTripleHeavyHaptic(); setSelectedJourneyId(selectedJourneyId === journey.id ? null : journey.id); }}
+                onClick={() => { triggerHaptic(); setSelectedJourneyId(selectedJourneyId === journey.id ? null : journey.id); }}
                 className="w-full text-left p-4 rounded-2xl transition-all cursor-pointer"
                 style={{
                   backgroundColor: selectedJourneyId === journey.id ? `${ONBOARDING_COLOR}20` : '#ffffff',
@@ -1995,7 +1995,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
             {renderSingleSelect(
               [t('onboarding.frustTooSlow'), t('onboarding.frustTooExpensive'), t('onboarding.frustLacksFeatures'), t('onboarding.frustTooComplicated'), t('onboarding.frustBadMobile'), t('onboarding.frustOther')],
               selectedFrustration,
-              (val: string) => { triggerTripleHeavyHaptic(); setSelectedFrustration(selectedFrustration === val ? null : val); }
+              (val: string) => { triggerHaptic(); setSelectedFrustration(selectedFrustration === val ? null : val); }
             )}
           </motion.div>
         )}
@@ -2011,7 +2011,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
             {renderSingleSelect(
               [t('onboarding.taskViewDaily'), t('onboarding.taskViewKanban'), t('onboarding.taskViewProgress'), t('onboarding.taskViewPriority')],
               selectedTaskView,
-              (val: string) => { triggerTripleHeavyHaptic(); setSelectedTaskView(selectedTaskView === val ? null : val); }
+              (val: string) => { triggerHaptic(); setSelectedTaskView(selectedTaskView === val ? null : val); }
             )}
           </motion.div>
         )}
@@ -2028,7 +2028,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
               [t('onboarding.deviceIPhone'), t('onboarding.deviceIPad'), t('onboarding.deviceMac'), t('onboarding.deviceAndroid'), t('onboarding.deviceWindows'), t('onboarding.deviceSingle')],
               selectedDevices,
               (val: string) => {
-                triggerTripleHeavyHaptic();
+                triggerHaptic();
                 setSelectedDevices(prev => {
                   const next = new Set(prev);
                   if (val === t('onboarding.deviceSingle')) {
@@ -2054,7 +2054,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
             {renderSingleSelect(
               [t('onboarding.offlineCritical'), t('onboarding.offlineNice'), t('onboarding.offlineNoMatter')],
               selectedOffline,
-              (val: string) => { triggerTripleHeavyHaptic(); setSelectedOffline(selectedOffline === val ? null : val); }
+              (val: string) => { triggerHaptic(); setSelectedOffline(selectedOffline === val ? null : val); }
             )}
           </motion.div>
         )}
@@ -2070,7 +2070,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
             {renderSingleSelect(
               [t('onboarding.unfinishedEveryday'), t('onboarding.unfinishedSometimes'), t('onboarding.unfinishedRarely')],
               selectedUnfinished,
-              (val: string) => { triggerTripleHeavyHaptic(); setSelectedUnfinished(selectedUnfinished === val ? null : val); }
+              (val: string) => { triggerHaptic(); setSelectedUnfinished(selectedUnfinished === val ? null : val); }
             )}
           </motion.div>
         )}
@@ -2086,7 +2086,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
             {renderSingleSelect(
               [t('onboarding.slowdownApps'), t('onboarding.slowdownSubscriptions'), t('onboarding.slowdownLosingWork')],
               selectedSlowdown,
-              (val: string) => { triggerTripleHeavyHaptic(); setSelectedSlowdown(selectedSlowdown === val ? null : val); }
+              (val: string) => { triggerHaptic(); setSelectedSlowdown(selectedSlowdown === val ? null : val); }
             )}
           </motion.div>
         )}
@@ -2132,7 +2132,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
               onCropComplete={(croppedDataUrl) => {
                 setAvatarPreview(croppedDataUrl);
                 setCropImageSrc(null);
-                triggerTripleHeavyHaptic();
+                triggerHaptic();
               }}
               onCancel={() => setCropImageSrc(null)}
               cropShape="round"
@@ -2153,7 +2153,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
             {renderSingleSelect(
               [t('onboarding.whyFailForgot'), t('onboarding.whyFailComplex'), t('onboarding.whyFailDontFit')],
               selectedWhyFail,
-              (val: string) => { triggerTripleHeavyHaptic(); setSelectedWhyFail(selectedWhyFail === val ? null : val); }
+              (val: string) => { triggerHaptic(); setSelectedWhyFail(selectedWhyFail === val ? null : val); }
             )}
           </motion.div>
         )}
