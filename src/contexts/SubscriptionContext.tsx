@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect, useCallback, useMemo, R
 import { getSetting, setSetting } from '@/utils/settingsStorage';
 import { getStoredGoogleUser } from '@/utils/googleAuth';
 import { Capacitor } from '@capacitor/core';
+import { supabase } from '@/lib/supabase';
 import {
   Purchases,
   LOG_LEVEL,
@@ -458,13 +459,47 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
+  // Check Stripe subscription on web
+  const checkStripeSubscription = useCallback(async () => {
+    if (Capacitor.isNativePlatform()) return;
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.access_token) return;
+      
+      const { data, error } = await supabase.functions.invoke('check-subscription', {
+        headers: { Authorization: `Bearer ${session.access_token}` },
+      });
+      
+      if (error) {
+        console.error('Stripe check-subscription error:', error);
+        return;
+      }
+      
+      if (data?.subscribed) {
+        setRcIsPro(true);
+        // Map plan_type from edge function
+        if (data.plan_type) {
+          // Store for planType detection
+          (window as any).__stripePlanType = data.plan_type;
+          (window as any).__stripeIsTrialing = data.is_trialing || false;
+        }
+      } else {
+        // Only clear if not admin bypass
+        if (!isAdminBypass) {
+          setRcIsPro(false);
+        }
+      }
+    } catch (err) {
+      console.error('Failed to check Stripe subscription:', err);
+    }
+  }, [isAdminBypass]);
+
   // Auto-initialize RevenueCat on mount with Firebase UID for subscription association
   useEffect(() => {
     if (!isInitialized && Capacitor.isNativePlatform()) {
       const initWithFirebaseUser = async () => {
         try {
           const storedUser = await getStoredGoogleUser();
-          // Use Firebase UID as appUserID so subscriptions are tied to the Google account
           const appUserID = storedUser?.uid || storedUser?.email || undefined;
           await initialize(appUserID);
         } catch {
@@ -474,8 +509,37 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
       initWithFirebaseUser();
     } else if (!Capacitor.isNativePlatform()) {
       setIsInitialized(true);
+      // Check Stripe subscription on web
+      checkStripeSubscription();
     }
-  }, [initialize, isInitialized]);
+  }, [initialize, isInitialized, checkStripeSubscription]);
+
+  // Periodically check Stripe subscription on web (every 60s)
+  useEffect(() => {
+    if (Capacitor.isNativePlatform()) return;
+    const interval = setInterval(checkStripeSubscription, 60000);
+    return () => clearInterval(interval);
+  }, [checkStripeSubscription]);
+
+  // Re-check Stripe sub when returning to the tab (after checkout redirect)
+  useEffect(() => {
+    if (Capacitor.isNativePlatform()) return;
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        checkStripeSubscription();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
+    return () => document.removeEventListener('visibilitychange', handleVisibility);
+  }, [checkStripeSubscription]);
+
+  // Listen for stripe restore event from paywall
+  useEffect(() => {
+    if (Capacitor.isNativePlatform()) return;
+    const handleRestore = () => checkStripeSubscription();
+    window.addEventListener('stripeSubscriptionRestored', handleRestore);
+    return () => window.removeEventListener('stripeSubscriptionRestored', handleRestore);
+  }, [checkStripeSubscription]);
 
   // Re-login to RevenueCat when Google auth state changes (sign in / sign out)
   useEffect(() => {
@@ -558,10 +622,17 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
   const tier: SubscriptionTier = isPro ? 'premium' : 'free';
   const isLoading = localLoading || rcLoading || (Capacitor.isNativePlatform() && !isInitialized);
 
-  // Detect plan type from RevenueCat entitlement
+  // Detect plan type from RevenueCat entitlement or Stripe
   const planType: SubscriptionPlanType = useMemo(() => {
     if (!isPro) return 'none';
     if (localProAccess) return 'monthly';
+    // Web Stripe plan type
+    const stripePlan = (window as any).__stripePlanType;
+    if (!Capacitor.isNativePlatform() && stripePlan) {
+      if (stripePlan === 'weekly') return 'weekly';
+      if (stripePlan === 'monthly') return 'monthly';
+      if (stripePlan === 'yearly') return 'yearly';
+    }
     if (!customerInfo) return 'none';
     const entitlement = customerInfo.entitlements.active[ENTITLEMENT_ID];
     if (!entitlement) return 'none';
