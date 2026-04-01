@@ -12,13 +12,8 @@ export const configureStatusBar = async (isDarkMode: boolean) => {
   try {
     const platform = Capacitor.getPlatform();
     
-    // On iOS: overlay WebView for edge-to-edge (safe areas work properly)
-    // On Android: do NOT overlay so the system nav bar doesn't create blank space
-    if (platform === 'ios') {
-      await StatusBar.setOverlaysWebView({ overlay: true });
-    } else {
-      await StatusBar.setOverlaysWebView({ overlay: false });
-    }
+    // Keep native layout aligned with the web UI on both platforms.
+    await StatusBar.setOverlaysWebView({ overlay: true });
     
     // Set status bar icons to contrast with app background
     await StatusBar.setStyle({
