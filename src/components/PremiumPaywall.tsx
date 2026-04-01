@@ -214,12 +214,13 @@ function usePaywallLogic() {
     t, showPaywall, selectedPlan, setSelectedPlan, isPurchasing, isRestoring,
     adminCode, setAdminCode, showAdminInput, setShowAdminInput, adminError,
     PLANS, currentPlan, handlePurchase, handleRestore, handleAccessCode, hasUsedTrial,
+    restoreEmail, setRestoreEmail, showRestoreEmail,
   };
 }
 
 // Footer: Restore + Access Code (shared across variants)
 function PaywallFooter({ logic }: { logic: ReturnType<typeof usePaywallLogic> }) {
-  const { t, isRestoring, handleRestore, showAdminInput, setShowAdminInput, adminCode, setAdminCode, handleAccessCode, adminError } = logic;
+  const { t, isRestoring, handleRestore, showAdminInput, setShowAdminInput, adminCode, setAdminCode, handleAccessCode, adminError, restoreEmail, setRestoreEmail, showRestoreEmail } = logic;
   return (
     <div className="flex flex-col items-center gap-2 mt-3">
       {adminError && <p className="text-xs" style={{ color: 'hsl(0 84.2% 60.2%)' }}>{adminError}</p>}
