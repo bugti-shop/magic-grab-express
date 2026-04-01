@@ -7,6 +7,7 @@ import { Capacitor } from '@capacitor/core';
 import { PurchasesPackage, PACKAGE_TYPE } from '@revenuecat/purchases-capacitor';
 import { triggerTripleHeavyHaptic } from '@/utils/haptics';
 import { setSetting } from '@/utils/settingsStorage';
+import { supabase } from '@/lib/supabase';
 
 import { m as motion, AnimatePresence } from 'framer-motion';
 
