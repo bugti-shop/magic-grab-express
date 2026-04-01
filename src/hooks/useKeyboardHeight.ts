@@ -21,15 +21,21 @@ export const useKeyboardHeight = () => {
 
       const setupNativeListeners = async () => {
         try {
-          // Listen for keyboard show event
-          showListener = await Keyboard.addListener('keyboardWillShow', (info) => {
+          // Set resize mode to none so WebView doesn't shrink — we handle positioning manually
+          try {
+            await Keyboard.setResizeMode({ mode: 'none' as any });
+          } catch (_) {
+            // setResizeMode may not be available on all versions
+          }
+
+          // Use keyboardDidShow for accurate final height (especially on Android)
+          showListener = await Keyboard.addListener('keyboardDidShow', (info) => {
             const height = info.keyboardHeight;
             setKeyboardHeight(height);
             document.documentElement.style.setProperty('--keyboard-inset', `${height}px`);
           });
 
-          // Listen for keyboard hide event
-          hideListener = await Keyboard.addListener('keyboardWillHide', () => {
+          hideListener = await Keyboard.addListener('keyboardDidHide', () => {
             setKeyboardHeight(0);
             document.documentElement.style.setProperty('--keyboard-inset', '0px');
           });
@@ -55,30 +61,22 @@ export const useKeyboardHeight = () => {
     const viewport = window.visualViewport;
 
     const handleResize = () => {
-      // Calculate the difference between initial viewport and current viewport
-      // When keyboard opens, visualViewport.height shrinks
       const currentHeight = viewport.height;
       const heightDiff = Math.max(0, window.innerHeight - currentHeight);
-      
-      // Only consider it a keyboard if the difference is significant (> 100px)
       const newKeyboardHeight = heightDiff > 100 ? heightDiff : 0;
       
       setKeyboardHeight(newKeyboardHeight);
-      
-      // Update CSS custom property for use in stylesheets
       document.documentElement.style.setProperty(
         '--keyboard-inset',
         `${newKeyboardHeight}px`
       );
     };
 
-    // Initial check
     handleResize();
 
     viewport.addEventListener('resize', handleResize);
     viewport.addEventListener('scroll', handleResize);
 
-    // Also listen for focus events on inputs to help detect keyboard
     const handleFocus = (e: FocusEvent) => {
       const target = e.target as HTMLElement;
       if (
@@ -86,14 +84,12 @@ export const useKeyboardHeight = () => {
         target.tagName === 'TEXTAREA' ||
         target.isContentEditable
       ) {
-        // Small delay to let keyboard animation start
         setTimeout(handleResize, 100);
         setTimeout(handleResize, 300);
       }
     };
 
     const handleBlur = () => {
-      // Reset when input loses focus
       setTimeout(() => {
         setKeyboardHeight(0);
         document.documentElement.style.setProperty('--keyboard-inset', '0px');
