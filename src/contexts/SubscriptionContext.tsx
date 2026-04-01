@@ -533,6 +533,14 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
     return () => document.removeEventListener('visibilitychange', handleVisibility);
   }, [checkStripeSubscription]);
 
+  // Listen for stripe restore event from paywall
+  useEffect(() => {
+    if (Capacitor.isNativePlatform()) return;
+    const handleRestore = () => checkStripeSubscription();
+    window.addEventListener('stripeSubscriptionRestored', handleRestore);
+    return () => window.removeEventListener('stripeSubscriptionRestored', handleRestore);
+  }, [checkStripeSubscription]);
+
   // Re-login to RevenueCat when Google auth state changes (sign in / sign out)
   useEffect(() => {
     const handleAuthChange = async () => {
