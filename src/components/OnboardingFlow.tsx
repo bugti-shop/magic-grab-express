@@ -931,9 +931,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
     } else if (step === 6) {
       setStep(13); // → INFO (sketch moved to after devices)
     } else if (step === 13) {
-      setStep(14); // → create task
-    } else if (step === 14) {
-      setStep(25); // → feature showcase
+      setStep(25); // → feature showcase (skip task creation step 14)
     } else if (step === 25) {
       setStep(26); // → loading screen
     } else if (step === 24) {
@@ -986,8 +984,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
     else if (step === 36) setStep(35); // back from why fail → slowdown
     else if (step === 6) setStep(36); // back from note → why fail
     else if (step === 13) setStep(6); // back from INFO → note (sketch removed from here)
-    else if (step === 14) setStep(13); // back from task → INFO
-    else if (step === 25) setStep(14); // back from showcase → task
+    else if (step === 25) setStep(13); // back from showcase → INFO (skip task step 14)
   }, [step, selectedJourneyId]);
 
   const handleImagePick = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -1012,7 +1009,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
 
   // Sequential flow order mapping: internal step → display position (exclude pre-steps -3,-2,-1)
   // Step 5 has 3 sub-screens (info, notes folders, tasks folders) — use 5.1/5.2 as virtual entries
-  const FLOW_ORDER: number[] = [0, 3, 28, 30, 31, 24, 29, 32, 10, 33, 5, 5.1, 5.2, 34, 35, 36, 6, 13, 14, 25, 26];
+  const FLOW_ORDER: number[] = [0, 3, 28, 30, 31, 24, 29, 32, 10, 33, 5, 5.1, 5.2, 34, 35, 36, 6, 13, 25, 26];
   const stepCount = FLOW_ORDER.length;
   // For step 5, determine sub-step based on folder creation state
   const getDisplayStep = () => {
@@ -1051,7 +1048,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
 
   // Add/remove body class for z-index overrides on Radix portals
   useEffect(() => {
-    if ([6, 10, 14].includes(step)) {
+    if ([6, 10].includes(step)) {
       document.body.classList.add('onboarding-active');
     } else {
       document.body.classList.remove('onboarding-active');
