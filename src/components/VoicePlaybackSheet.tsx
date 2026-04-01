@@ -254,7 +254,7 @@ export const VoicePlaybackSheet = ({
         </div>
         
         {/* Safe area padding */}
-        <div className="h-[env(safe-area-inset-bottom)]" />
+        <div className="h-[var(--safe-bottom, 0px)]" />
       </div>
     </>
   );

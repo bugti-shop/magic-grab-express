@@ -1025,7 +1025,7 @@ const TodoCalendar = () => {
 
   return (
     <div className="min-h-screen bg-background pb-14">
-      <div style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
+      <div style={{ paddingTop: 'var(--safe-top, 0px)' }}>
         {/* Selection mode actions */}
         {isSelectionMode && (
           <div className="flex items-center justify-between gap-2 p-2 mx-4 mt-2 bg-muted rounded-lg">

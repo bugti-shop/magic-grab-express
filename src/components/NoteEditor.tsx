@@ -944,7 +944,7 @@ export const NoteEditor = ({ note, isOpen, onClose, onSave, defaultType = 'regul
       {true && (
         <div
           className="flex justify-between items-center px-4 py-3 border-b"
-          style={{ backgroundColor: getEditorBackgroundColor(), borderColor: 'rgba(0,0,0,0.1)', paddingTop: 'calc(env(safe-area-inset-top, 0px) + 12px)' }}
+          style={{ backgroundColor: getEditorBackgroundColor(), borderColor: 'rgba(0,0,0,0.1)', paddingTop: 'calc(var(--safe-top, 0px) + 12px)' }}
         >
           <Button variant="ghost" size="icon" onClick={handleClose} className={cn("h-9 w-9", noteType === 'sticky' && "text-black hover:text-black")}>
             <ArrowLeft className="h-5 w-5" />
